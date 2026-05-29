@@ -1,0 +1,44 @@
+{
+  "tournament": "FIFA World Cup 2026",
+  "season": "2026",
+  "lastUpdated": "",
+  "pointsRules": {
+    "groupWin": 3,
+    "groupDraw": 1,
+    "gs4th": 0,
+    "gs3rd": 1,
+    "r32Loser": 3,
+    "r16Loser": 4,
+    "qfLoser": 6,
+    "fourth": 8,
+    "third": 9,
+    "runnerUp": 11,
+    "winner": 14
+  },
+  "groups": {
+    "A": ["Mexico", "South Africa", "Korea Republic", "Czechia"],
+    "B": ["Canada", "Switzerland", "Qatar", "Bosnia and Herzegovina"],
+    "C": ["Brazil", "Morocco", "Haiti", "Scotland"],
+    "D": ["United States", "Paraguay", "Australia", "Türkiye"],
+    "E": ["Germany", "Curaçao", "Côte d’Ivoire", "Ecuador"],
+    "F": ["Netherlands", "Japan", "Tunisia", "Sweden"],
+    "G": ["Belgium", "Egypt", "Iran", "New Zealand"],
+    "H": ["Spain", "Cabo Verde", "Saudi Arabia", "Uruguay"],
+    "I": ["France", "Senegal", "Norway", "Iraq"],
+    "J": ["Argentina", "Algeria", "Austria", "Jordan"],
+    "K": ["Portugal", "Uzbekistan", "Colombia", "Congo DR"],
+    "L": ["England", "Croatia", "Ghana", "Panama"]
+  },
+  "players": [
+    { "name": "Adrian", "nations": ["", "", "", "", "", ""] },
+    { "name": "Damian", "nations": ["", "", "", "", "", ""] },
+    { "name": "Daniel", "nations": ["", "", "", "", "", ""] },
+    { "name": "Jake", "nations": ["", "", "", "", "", ""] },
+    { "name": "Mark", "nations": ["", "", "", "", "", ""] },
+    { "name": "Michael", "nations": ["", "", "", "", "", ""] },
+    { "name": "Simon", "nations": ["", "", "", "", "", ""] },
+    { "name": "Swanson", "nations": ["", "", "", "", "", ""] }
+  ],
+  "groupResults": {},
+  "knockoutMatches": []
+}

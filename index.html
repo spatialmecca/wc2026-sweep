@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Cup 2026 Sweepstake</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">⚽</span>
+      <div>
+        <h1>World Cup 2026 Sweepstake</h1>
+        <p class="brand-sub">Live ladder &amp; tournament archive</p>
+      </div>
+    </div>
+    <label class="scorer-toggle" title="Turn on to edit results and setup">
+      <input type="checkbox" id="scorerToggle" />
+      <span>Scorer mode</span>
+    </label>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-view="ladder">Live Ladder</button>
+    <button class="tab" data-view="results">Results</button>
+    <button class="tab" data-view="setup">Setup</button>
+    <button class="tab" data-view="archive">Archive</button>
+  </nav>
+
+  <div id="statusBar" class="status-bar hidden"></div>
+
+  <main>
+    <section id="view-ladder" class="view"></section>
+    <section id="view-results" class="view hidden"></section>
+    <section id="view-setup" class="view hidden"></section>
+    <section id="view-archive" class="view hidden"></section>
+  </main>
+
+  <footer class="app-footer">
+    <span>Sweepstake tracker · static site · data lives in <code>data/config2026.json</code></span>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>

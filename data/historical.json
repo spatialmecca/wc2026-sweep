@@ -1,0 +1,196 @@
+{
+  "tournaments": [
+    {
+      "id": "wc2018",
+      "name": "World Cup 2018",
+      "type": "World Cup",
+      "host": "Russia",
+      "format": "8 players × 4 nations (32 teams)",
+      "champions": ["Mark Rossi", "Michael Luca"],
+      "notes": "Mark Rossi and Michael Luca tied on 42 points and shared the title.",
+      "nationFields": ["groupPts", "elimPts", "total"],
+      "standings": [
+        { "rank": 1, "player": "Mark Rossi", "pts": 42, "nations": [
+          { "team": "Argentina", "groupPts": 4, "elimPts": 4, "total": 8 },
+          { "team": "Croatia", "groupPts": 9, "elimPts": 11, "total": 20 },
+          { "team": "Iran", "groupPts": 4, "elimPts": 2, "total": 6 },
+          { "team": "Japan", "groupPts": 4, "elimPts": 4, "total": 8 } ] },
+        { "rank": 1, "player": "Michael Luca", "pts": 42, "nations": [
+          { "team": "Brazil", "groupPts": 7, "elimPts": 6, "total": 13 },
+          { "team": "Peru", "groupPts": 3, "elimPts": 2, "total": 5 },
+          { "team": "Sweden", "groupPts": 6, "elimPts": 6, "total": 12 },
+          { "team": "Russia", "groupPts": 6, "elimPts": 6, "total": 12 } ] },
+        { "rank": 3, "player": "Daniel Giannasi", "pts": 37, "nations": [
+          { "team": "Belgium", "groupPts": 9, "elimPts": 9, "total": 18 },
+          { "team": "Switzerland", "groupPts": 5, "elimPts": 4, "total": 9 },
+          { "team": "Tunisia", "groupPts": 3, "elimPts": 2, "total": 5 },
+          { "team": "Nigeria", "groupPts": 3, "elimPts": 2, "total": 5 } ] },
+        { "rank": 4, "player": "Simon Falcone", "pts": 35, "nations": [
+          { "team": "Denmark", "groupPts": 5, "elimPts": 4, "total": 9 },
+          { "team": "Uruguay", "groupPts": 9, "elimPts": 6, "total": 15 },
+          { "team": "Mexico", "groupPts": 6, "elimPts": 4, "total": 10 },
+          { "team": "Panama", "groupPts": 0, "elimPts": 1, "total": 1 } ] },
+        { "rank": 5, "player": "Adrian Petrilli", "pts": 29, "nations": [
+          { "team": "France", "groupPts": 7, "elimPts": 14, "total": 21 },
+          { "team": "Iceland", "groupPts": 1, "elimPts": 1, "total": 2 },
+          { "team": "Egypt", "groupPts": 0, "elimPts": 1, "total": 1 },
+          { "team": "South Korea", "groupPts": 3, "elimPts": 2, "total": 5 } ] },
+        { "rank": 5, "player": "Swanson Ng", "pts": 29, "nations": [
+          { "team": "Portugal", "groupPts": 5, "elimPts": 4, "total": 9 },
+          { "team": "Spain", "groupPts": 5, "elimPts": 4, "total": 9 },
+          { "team": "Senegal", "groupPts": 4, "elimPts": 2, "total": 6 },
+          { "team": "Serbia", "groupPts": 3, "elimPts": 2, "total": 5 } ] },
+        { "rank": 7, "player": "Jake Geddes", "pts": 22, "nations": [
+          { "team": "Germany", "groupPts": 3, "elimPts": 1, "total": 4 },
+          { "team": "England", "groupPts": 6, "elimPts": 8, "total": 14 },
+          { "team": "Costa Rica", "groupPts": 1, "elimPts": 1, "total": 2 },
+          { "team": "Australia", "groupPts": 1, "elimPts": 1, "total": 2 } ] },
+        { "rank": 8, "player": "Aaron Poropat", "pts": 21, "nations": [
+          { "team": "Poland", "groupPts": 3, "elimPts": 1, "total": 4 },
+          { "team": "Colombia", "groupPts": 6, "elimPts": 4, "total": 10 },
+          { "team": "Morocco", "groupPts": 1, "elimPts": 1, "total": 2 },
+          { "team": "Saudi Arabia", "groupPts": 3, "elimPts": 2, "total": 5 } ] }
+      ]
+    },
+    {
+      "id": "euro2020",
+      "name": "Euro 2020",
+      "type": "Euros",
+      "host": "Europe (multi-host)",
+      "format": "8 players × 3 nations (24 teams)",
+      "champions": ["Damian De Wind"],
+      "notes": "Played in 2021. GS 3rd-place bonus applied only to eliminated teams.",
+      "nationFields": ["gd", "groupPts", "elimPts", "total"],
+      "standings": [
+        { "rank": 1, "player": "Damian De Wind", "pts": 46, "gd": 14, "nations": [
+          { "team": "Italy", "gd": 7, "groupPts": 9, "elimPts": 14, "total": 23 },
+          { "team": "Netherlands", "gd": 6, "groupPts": 9, "elimPts": 4, "total": 13 },
+          { "team": "Czech Republic", "gd": 1, "groupPts": 4, "elimPts": 6, "total": 10 } ] },
+        { "rank": 2, "player": "Mark Rossi", "pts": 32, "gd": -4, "nations": [
+          { "team": "England", "gd": 2, "groupPts": 7, "elimPts": 11, "total": 18 },
+          { "team": "Ukraine", "gd": -1, "groupPts": 3, "elimPts": 6, "total": 9 },
+          { "team": "Slovakia", "gd": -5, "groupPts": 3, "elimPts": 2, "total": 5 } ] },
+        { "rank": 3, "player": "Adrian Petrilli", "pts": 25, "gd": 3, "nations": [
+          { "team": "Belgium", "gd": 6, "groupPts": 9, "elimPts": 6, "total": 15 },
+          { "team": "Wales", "gd": 1, "groupPts": 4, "elimPts": 4, "total": 8 },
+          { "team": "Scotland", "gd": -4, "groupPts": 1, "elimPts": 1, "total": 2 } ] },
+        { "rank": 3, "player": "Jake Geddes", "pts": 25, "gd": 3, "nations": [
+          { "team": "Spain", "gd": 5, "groupPts": 5, "elimPts": 9, "total": 14 },
+          { "team": "Croatia", "gd": 1, "groupPts": 4, "elimPts": 4, "total": 8 },
+          { "team": "Hungary", "gd": -3, "groupPts": 2, "elimPts": 1, "total": 3 } ] },
+        { "rank": 5, "player": "Daniel Giannasi", "pts": 23, "gd": -4, "nations": [
+          { "team": "Denmark", "gd": 1, "groupPts": 3, "elimPts": 8, "total": 11 },
+          { "team": "Sweden", "gd": 2, "groupPts": 7, "elimPts": 4, "total": 11 },
+          { "team": "Turkey", "gd": -7, "groupPts": 0, "elimPts": 1, "total": 1 } ] },
+        { "rank": 5, "player": "Swanson Ng", "pts": 23, "gd": 0, "nations": [
+          { "team": "Germany", "gd": 1, "groupPts": 4, "elimPts": 4, "total": 8 },
+          { "team": "Austria", "gd": 1, "groupPts": 6, "elimPts": 4, "total": 10 },
+          { "team": "Finland", "gd": -2, "groupPts": 3, "elimPts": 2, "total": 5 } ] },
+        { "rank": 7, "player": "Simon Falcone", "pts": 20, "gd": -6, "nations": [
+          { "team": "France", "gd": 1, "groupPts": 5, "elimPts": 4, "total": 9 },
+          { "team": "Switzerland", "gd": -1, "groupPts": 4, "elimPts": 6, "total": 10 },
+          { "team": "North Macedonia", "gd": -6, "groupPts": 0, "elimPts": 1, "total": 1 } ] },
+        { "rank": 8, "player": "Michael Luca", "pts": 14, "gd": -6, "nations": [
+          { "team": "Portugal", "gd": 1, "groupPts": 4, "elimPts": 4, "total": 8 },
+          { "team": "Poland", "gd": -2, "groupPts": 1, "elimPts": 1, "total": 2 },
+          { "team": "Russia", "gd": -5, "groupPts": 3, "elimPts": 1, "total": 4 } ] }
+      ]
+    },
+    {
+      "id": "wc2022",
+      "name": "World Cup 2022",
+      "type": "World Cup",
+      "host": "Qatar",
+      "format": "8 players × 4 nations (32 teams)",
+      "champions": ["Mark Rossi"],
+      "notes": "Per-nation figures show group-stage points and group-stage goal difference.",
+      "nationFields": ["groupPts", "groupGd"],
+      "standings": [
+        { "rank": 1, "player": "Mark Rossi", "pts": 47, "gp": 18, "gd": 10, "nations": [
+          { "team": "England", "groupPts": 7, "groupGd": 7 },
+          { "team": "USA", "groupPts": 5, "groupGd": 1 },
+          { "team": "Morocco", "groupPts": 7, "groupGd": 3 },
+          { "team": "Australia", "groupPts": 6, "groupGd": -1 } ] },
+        { "rank": 2, "player": "Simon Falcone", "pts": 43, "gp": 17, "gd": 6, "nations": [
+          { "team": "France", "groupPts": 6, "groupGd": 3 },
+          { "team": "Senegal", "groupPts": 6, "groupGd": 1 },
+          { "team": "Japan", "groupPts": 6, "groupGd": 1 },
+          { "team": "Cameroon", "groupPts": 4, "groupGd": 0 } ] },
+        { "rank": 3, "player": "Adrian Petrilli", "pts": 36, "gp": 18, "gd": -3, "nations": [
+          { "team": "Netherlands", "groupPts": 7, "groupGd": 4 },
+          { "team": "Croatia", "groupPts": 5, "groupGd": 3 },
+          { "team": "Poland", "groupPts": 4, "groupGd": 0 },
+          { "team": "Canada", "groupPts": 0, "groupGd": -5 } ] },
+        { "rank": 4, "player": "Michael Luca", "pts": 32, "gp": 16, "gd": -2, "nations": [
+          { "team": "Argentina", "groupPts": 6, "groupGd": 3 },
+          { "team": "Germany", "groupPts": 4, "groupGd": 1 },
+          { "team": "Wales", "groupPts": 1, "groupGd": -5 },
+          { "team": "Costa Rica", "groupPts": 3, "groupGd": -8 } ] },
+        { "rank": 5, "player": "Jake Geddes", "pts": 28, "gp": 13, "gd": 4, "nations": [
+          { "team": "Portugal", "groupPts": 6, "groupGd": 2 },
+          { "team": "Mexico", "groupPts": 4, "groupGd": -1 },
+          { "team": "Tunisia", "groupPts": 4, "groupGd": 0 },
+          { "team": "Saudi Arabia", "groupPts": 3, "groupGd": -2 } ] },
+        { "rank": 6, "player": "Swanson Ng", "pts": 26, "gp": 14, "gd": -2, "nations": [
+          { "team": "Brazil", "groupPts": 6, "groupGd": 2 },
+          { "team": "Denmark", "groupPts": 1, "groupGd": -2 },
+          { "team": "South Korea", "groupPts": 4, "groupGd": 0 },
+          { "team": "Ghana", "groupPts": 3, "groupGd": -2 } ] },
+        { "rank": 7, "player": "Daniel Giannasi", "pts": 25, "gp": 14, "gd": -4, "nations": [
+          { "team": "Spain", "groupPts": 4, "groupGd": 6 },
+          { "team": "Switzerland", "groupPts": 6, "groupGd": 1 },
+          { "team": "Serbia", "groupPts": 1, "groupGd": -3 },
+          { "team": "Iran", "groupPts": 3, "groupGd": -3 } ] },
+        { "rank": 8, "player": "Damian De Wind", "pts": 19, "gp": 12, "gd": -6, "nations": [
+          { "team": "Belgium", "groupPts": 4, "groupGd": -1 },
+          { "team": "Uruguay", "groupPts": 4, "groupGd": 0 },
+          { "team": "Ecuador", "groupPts": 4, "groupGd": 1 },
+          { "team": "Qatar", "groupPts": 0, "groupGd": -6 } ] }
+      ]
+    },
+    {
+      "id": "euro2024",
+      "name": "Euro 2024",
+      "type": "Euros",
+      "host": "Germany",
+      "format": "8 players × 3 nations (24 teams)",
+      "champions": ["Damian De Wind"],
+      "notes": "Per-nation figures show group-stage points and group-stage goal difference.",
+      "nationFields": ["groupPts", "groupGd"],
+      "standings": [
+        { "rank": 1, "player": "Damian De Wind", "pts": 54, "gp": 17, "gd": 6, "nations": [
+          { "team": "England", "groupPts": 5, "groupGd": 1 },
+          { "team": "Switzerland", "groupPts": 5, "groupGd": 2 },
+          { "team": "Türkiye", "groupPts": 6, "groupGd": 0 } ] },
+        { "rank": 2, "player": "Michael Luca", "pts": 50, "gp": 15, "gd": 10, "nations": [
+          { "team": "Romania", "groupPts": 4, "groupGd": 1 },
+          { "team": "Spain", "groupPts": 9, "groupGd": 5 },
+          { "team": "Austria", "groupPts": 6, "groupGd": 2 } ] },
+        { "rank": 3, "player": "Jake Geddes", "pts": 33, "gp": 14, "gd": -2, "nations": [
+          { "team": "Netherlands", "groupPts": 4, "groupGd": 0 },
+          { "team": "Denmark", "groupPts": 3, "groupGd": 0 },
+          { "team": "Georgia", "groupPts": 4, "groupGd": 0 } ] },
+        { "rank": 4, "player": "Swanson Ng", "pts": 28, "gp": 12, "gd": -2, "nations": [
+          { "team": "Portugal", "groupPts": 6, "groupGd": 2 },
+          { "team": "Hungary", "groupPts": 3, "groupGd": -3 },
+          { "team": "Slovakia", "groupPts": 4, "groupGd": 0 } ] },
+        { "rank": 5, "player": "Mark Rossi", "pts": 25, "gp": 12, "gd": -2, "nations": [
+          { "team": "France", "groupPts": 5, "groupGd": 1 },
+          { "team": "Serbia", "groupPts": 2, "groupGd": -1 },
+          { "team": "Czech Republic", "groupPts": 1, "groupGd": -2 } ] },
+        { "rank": 6, "player": "Adrian Petrilli", "pts": 22, "gp": 11, "gd": -1, "nations": [
+          { "team": "Croatia", "groupPts": 2, "groupGd": -3 },
+          { "team": "Scotland", "groupPts": 1, "groupGd": -5 },
+          { "team": "Germany", "groupPts": 7, "groupGd": 6 } ] },
+        { "rank": 7, "player": "Daniel Giannasi", "pts": 20, "gp": 11, "gd": -4, "nations": [
+          { "team": "Italy", "groupPts": 4, "groupGd": 0 },
+          { "team": "Ukraine", "groupPts": 4, "groupGd": -2 },
+          { "team": "Slovenia", "groupPts": 3, "groupGd": 0 } ] },
+        { "rank": 8, "player": "Simon Falcone", "pts": 12, "gp": 10, "gd": -5, "nations": [
+          { "team": "Belgium", "groupPts": 4, "groupGd": 1 },
+          { "team": "Poland", "groupPts": 1, "groupGd": -3 },
+          { "team": "Albania", "groupPts": 1, "groupGd": -2 } ] }
+      ]
+    }
+  ]
+}

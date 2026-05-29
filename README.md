@@ -70,7 +70,7 @@ Each nation earns points; a player's score is the sum of their 6 nations.
 | Group-stage draw | 1 |
 | Finish group 4th | 0 |
 | Finish group 3rd *(eliminated only)* | +1 |
-| Lose in Round of 32 | 4 |
+| Lose in Round of 32 | 3 |
 | Lose in Round of 16 | 4 |
 | Lose in Quarter-final | 6 |
 | 4th place | 8 |

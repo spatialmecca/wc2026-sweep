@@ -16,17 +16,27 @@
         <p class="brand-sub">Live ladder &amp; tournament archive</p>
       </div>
     </div>
-    <label class="scorer-toggle" title="Turn on to edit results and setup">
-      <input type="checkbox" id="scorerToggle" />
-      <span>Scorer mode</span>
-    </label>
+    <div class="scorer-controls">
+      <label class="scorer-toggle" title="Turn on to edit results and setup">
+        <input type="checkbox" id="scorerToggle" />
+        <span>Scorer mode</span>
+      </label>
+      <details class="info-popover">
+        <summary class="info-btn" aria-label="About scorer mode" title="About scorer mode">i</summary>
+        <div class="info-content">
+          <p><strong>Scorer mode</strong> unlocks editing on the Setup and Results tabs.</p>
+          <p>Your edits are saved in your browser automatically. To publish them for everyone, click <strong>Export config2026.json</strong> in the yellow bar and commit the file to the repo.</p>
+          <p>Viewers (Scorer mode off) see a read-only ladder.</p>
+        </div>
+      </details>
+    </div>
   </header>
 
   <nav class="tabs" id="tabs">
     <button class="tab active" data-view="ladder">Live Ladder</button>
     <button class="tab" data-view="results">Results</button>
     <button class="tab" data-view="setup">Setup</button>
-    <button class="tab" data-view="archive">Archive</button>
+    <button class="tab" data-view="archive">Overall Stats</button>
   </nav>
 
   <div id="statusBar" class="status-bar hidden"></div>

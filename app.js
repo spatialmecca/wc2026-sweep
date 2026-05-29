@@ -20,13 +20,14 @@ let HIST = null;       // historical.json
 let PUBLISHED = null;  // pristine config2026.json from the repo
 let CFG = null;        // working config (may be a local edited copy)
 let SCORER = false;
-let ARCHIVE_SEL = 0;
+let ARCHIVE_SEL = -1;
 
 /* ---------- bootstrap ---------- */
 async function boot() {
   try {
-    HIST = await fetch("data/historical.json").then(r => r.json());
-    PUBLISHED = await fetch("data/config2026.json").then(r => r.json());
+    const bust = "?t=" + Date.now();
+    HIST = await fetch("data/historical.json" + bust).then(r => r.json());
+    PUBLISHED = await fetch("data/config2026.json" + bust).then(r => r.json());
   } catch (e) {
     document.querySelector("main").innerHTML =
       '<p class="empty-note">Could not load data files. Serve this folder over HTTP (see README).</p>';
@@ -570,11 +571,12 @@ function renderSetup() {
 function renderArchive() {
   const view = document.getElementById("view-archive");
   const ts = HIST.tournaments;
-  const tabs = ts.map((t, i) =>
-    '<button class="archive-tab' + (i === ARCHIVE_SEL ? " active" : "") +
-    '" data-arch="' + i + '">' + esc(t.name) + "</button>").join("") +
+  const tabs =
     '<button class="archive-tab' + (ARCHIVE_SEL === -1 ? " active" : "") +
-    '" data-arch="-1">🏆 Honours board</button>';
+    '" data-arch="-1">🏆 Overall</button>' +
+    ts.map((t, i) =>
+      '<button class="archive-tab' + (i === ARCHIVE_SEL ? " active" : "") +
+      '" data-arch="' + i + '">' + esc(t.name) + "</button>").join("");
 
   let body;
   if (ARCHIVE_SEL === -1) {
@@ -584,8 +586,8 @@ function renderArchive() {
   }
 
   view.innerHTML =
-    "<h2>Historical archive</h2>" +
-    '<p class="section-sub">Past sweepstakes, taken from the original spreadsheets.</p>' +
+    "<h2>Overall Stats</h2>" +
+    '<p class="section-sub">Honours board, most-picked nations, and the full record from every past sweepstake.</p>' +
     '<div class="archive-tabs">' + tabs + "</div>" + body;
 
   view.querySelectorAll("[data-arch]").forEach(b => {
@@ -631,8 +633,8 @@ function renderTournament(t) {
 
 function renderHonours(ts) {
   const stat = {};
+  const nationCounts = {};
   ts.forEach(t => {
-    const n = t.standings.length;
     t.standings.forEach(s => {
       const k = s.player;
       stat[k] = stat[k] || { player: k, played: 0, titles: 0, podiums: 0, best: 99, points: 0 };
@@ -641,18 +643,34 @@ function renderHonours(ts) {
       if (t.champions.includes(k)) stat[k].titles++;
       if (s.rank <= 3) stat[k].podiums++;
       stat[k].best = Math.min(stat[k].best, s.rank);
+      nationCounts[k] = nationCounts[k] || {};
+      s.nations.forEach(nat => {
+        nationCounts[k][nat.team] = (nationCounts[k][nat.team] || 0) + 1;
+      });
     });
   });
-  const rows = Object.values(stat)
-    .sort((a, b) => b.titles - a.titles || b.podiums - a.podiums || a.best - b.best || b.points - a.points)
-    .map(s =>
-      "<tr><td><strong>" + esc(s.player) + "</strong></td>" +
-      '<td class="num">' + s.played + "</td>" +
-      '<td class="num">' + (s.titles ? "🏆".repeat(s.titles) + " " + s.titles : "—") + "</td>" +
-      '<td class="num">' + s.podiums + "</td>" +
-      '<td class="num">' + s.best + "</td>" +
-      '<td class="num">' + s.points + "</td></tr>"
-    ).join("");
+  const ordered = Object.values(stat).sort((a, b) =>
+    b.titles - a.titles || b.podiums - a.podiums || a.best - b.best || b.points - a.points);
+
+  const honoursRows = ordered.map(s =>
+    "<tr><td><strong>" + esc(s.player) + "</strong></td>" +
+    '<td class="num">' + s.played + "</td>" +
+    '<td class="num">' + (s.titles ? "🏆".repeat(s.titles) + " " + s.titles : "—") + "</td>" +
+    '<td class="num">' + s.podiums + "</td>" +
+    '<td class="num">' + s.best + "</td>" +
+    '<td class="num">' + s.points + "</td></tr>"
+  ).join("");
+
+  const nationRows = ordered.map(s => {
+    const list = Object.entries(nationCounts[s.player] || {})
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 5)
+      .map(([team, c]) => esc(team) + (c > 1 ? " <strong>×" + c + "</strong>" : ""))
+      .join(", ");
+    return "<tr><td><strong>" + esc(s.player) + "</strong></td>" +
+      '<td class="hist-nations">' + (list || "—") + "</td></tr>";
+  }).join("");
+
   return (
     '<div class="card"><h2>Honours board</h2>' +
     '<p class="section-sub">Across all four archived tournaments. ' +
@@ -660,7 +678,13 @@ function renderHonours(ts) {
     '<table class="hist honours-board"><thead><tr>' +
     "<th>Player</th><th>Played</th><th>Titles</th><th>Podiums</th>" +
     "<th>Best finish</th><th>Total pts</th>" +
-    "</tr></thead><tbody>" + rows + "</tbody></table></div>"
+    "</tr></thead><tbody>" + honoursRows + "</tbody></table></div>" +
+    '<div class="card"><h2>Most-picked nations</h2>' +
+    '<p class="section-sub">Each player\'s five most frequently drawn nations across past sweeps. ' +
+    "A count is shown when a nation has been picked more than once.</p>" +
+    '<table class="hist"><thead><tr>' +
+    "<th>Player</th><th>Top nations</th>" +
+    "</tr></thead><tbody>" + nationRows + "</tbody></table></div>"
   );
 }
 

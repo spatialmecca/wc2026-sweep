@@ -15,12 +15,17 @@ const EXIT_LABEL = {
 
 const LS_CONFIG = "wc2026sweep.config";
 const LS_SCORER = "wc2026sweep.scorer";
+const LS_CURSWEEP = "wc2026sweep.currentSweep";
+
+const GROUP_COLORS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
 let HIST = null;       // historical.json
 let PUBLISHED = null;  // pristine config2026.json from the repo
 let CFG = null;        // working config (may be a local edited copy)
 let SCORER = false;
 let ARCHIVE_SEL = -1;
+let CURRENT_SWEEP = 0; // index into CFG.sweeps
+let ACTIVE_VIEW = "ladder"; // ladder | draw | archive | results | setup
 
 /* ---------- bootstrap ---------- */
 async function boot() {
@@ -33,9 +38,12 @@ async function boot() {
       '<p class="empty-note">Could not load data files. Serve this folder over HTTP (see README).</p>';
     return;
   }
+  PUBLISHED = migrate(PUBLISHED);
   const local = localStorage.getItem(LS_CONFIG);
-  CFG = local ? JSON.parse(local) : deepCopy(PUBLISHED);
+  CFG = migrate(local ? JSON.parse(local) : deepCopy(PUBLISHED));
   SCORER = localStorage.getItem(LS_SCORER) === "1";
+  const savedSweep = parseInt(localStorage.getItem(LS_CURSWEEP) || "0", 10);
+  CURRENT_SWEEP = Math.min(Math.max(0, savedSweep), CFG.sweeps.length - 1);
 
   const toggle = document.getElementById("scorerToggle");
   toggle.checked = SCORER;
@@ -48,20 +56,48 @@ async function boot() {
   document.getElementById("tabs").addEventListener("click", (e) => {
     const t = e.target.closest(".tab");
     if (!t) return;
-    document.querySelectorAll(".tab").forEach(x => x.classList.toggle("active", x === t));
-    document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
-    document.getElementById("view-" + t.dataset.view).classList.remove("hidden");
+    ACTIVE_VIEW = t.dataset.view;
+    if (t.dataset.sweep != null) {
+      CURRENT_SWEEP = +t.dataset.sweep;
+      localStorage.setItem(LS_CURSWEEP, String(CURRENT_SWEEP));
+    }
+    renderAll();
   });
 
   renderAll();
 }
 
 function renderAll() {
+  renderTabs();
+  showActiveView();
   renderStatusBar();
   renderLadder();
+  renderDraw();
   renderResults();
   renderSetup();
   renderArchive();
+}
+
+function renderTabs() {
+  const nav = document.getElementById("tabs");
+  const brand = CFG.brand || "Banterade";
+  let html = "";
+  CFG.sweeps.forEach((sw, i) => {
+    const lActive = ACTIVE_VIEW === "ladder" && CURRENT_SWEEP === i;
+    const dActive = ACTIVE_VIEW === "draw" && CURRENT_SWEEP === i;
+    html += '<button class="tab' + (lActive ? " active" : "") + '" data-view="ladder" data-sweep="' + i + '">Table - ' + esc(sw.name) + "</button>";
+    html += '<button class="tab' + (dActive ? " active" : "") + '" data-view="draw" data-sweep="' + i + '">Draw - ' + esc(sw.name) + "</button>";
+  });
+  html += '<button class="tab' + (ACTIVE_VIEW === "archive" ? " active" : "") + '" data-view="archive">Overall - ' + esc(brand) + "</button>";
+  html += '<button class="tab' + (ACTIVE_VIEW === "results" ? " active" : "") + '" data-view="results">Results</button>';
+  html += '<button class="tab' + (ACTIVE_VIEW === "setup" ? " active" : "") + '" data-view="setup">Setup</button>';
+  nav.innerHTML = html;
+}
+
+function showActiveView() {
+  document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+  const el = document.getElementById("view-" + ACTIVE_VIEW);
+  if (el) el.classList.remove("hidden");
 }
 
 /* ---------- helpers ---------- */
@@ -73,7 +109,37 @@ function allTeams() {
   for (const g of Object.keys(CFG.groups)) CFG.groups[g].forEach(t => { if (t) out.push(t); });
   return out;
 }
+function teamGroupMap() {
+  const m = {};
+  for (const g of Object.keys(CFG.groups)) CFG.groups[g].forEach(t => { if (t) m[t] = g; });
+  return m;
+}
+function getSweep() { return CFG.sweeps[CURRENT_SWEEP] || null; }
+function getPlayers() { const s = getSweep(); return s ? s.players : []; }
+function slugify(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "sweep"; }
+function firstName(s) { return String(s || "").split(/\s+/)[0]; }
 function isDirty() { return JSON.stringify(CFG) !== JSON.stringify(PUBLISHED); }
+
+/* Migrate config from single-player-list (v1) to multi-sweep (v2). */
+function migrate(c) {
+  if (!c) return c;
+  if (!c.sweeps) {
+    c.sweeps = [{
+      id: "main",
+      name: "Sweep",
+      players: Array.isArray(c.players) ? c.players : []
+    }];
+    delete c.players;
+  }
+  c.sweeps.forEach((s, i) => {
+    if (!s.id) s.id = slugify(s.name || ("sweep-" + (i + 1)));
+    if (!Array.isArray(s.players)) s.players = [];
+    s.players.forEach(p => { if (!Array.isArray(p.nations)) p.nations = []; });
+  });
+  if (!c.teamRanks) c.teamRanks = {};
+  if (!c.brand) c.brand = "Banterade";
+  return c;
+}
 
 function saveLocal() {
   CFG.lastUpdated = new Date().toISOString();
@@ -118,7 +184,15 @@ function computeTeams() {
     gt.sort(cmpGroup);
     gt.forEach((t, i) => { t.groupPos = i + 1; });
   }
-  // best 8 of the 12 third-placed teams advance
+  // is the group stage complete? placement points only apply once it is
+  const groupStageDone = Object.keys(CFG.groups).every(g => {
+    for (let i = 0; i < 6; i++) {
+      const r = CFG.groupResults[g + "-" + i];
+      if (!r || r.a == null || r.b == null || r.a === "" || r.b === "") return false;
+    }
+    return true;
+  });
+  // best 8 of the 12 third-placed teams advance (only meaningful when group stage is done)
   const thirds = Object.values(teams).filter(t => t.groupPos === 3).sort(cmpGroup);
   const advThird = new Set(thirds.slice(0, 8).map(t => t.name));
 
@@ -139,6 +213,8 @@ function computeTeams() {
   for (const t of Object.values(teams)) {
     const koms = (koByTeam[t.name] || []).slice().sort((x, y) => KO_ORDER[x.round] - KO_ORDER[y.round]);
     if (koms.length === 0) {
+      // No knockout matches yet — placement only finalised when group stage is complete.
+      if (!groupStageDone) { t.exit = "pending"; t.status = "IN"; continue; }
       if (t.groupPos === 4) { t.elimPts = rules.gs4th; t.exit = "gs4"; t.status = "OUT"; }
       else if (t.groupPos === 3) {
         if (advThird.has(t.name)) { t.exit = "advanced"; t.status = "IN"; }
@@ -188,8 +264,8 @@ function koWinner(m) {
   return null; // drawn, no penalty result entered
 }
 
-function computePlayers(teams) {
-  const rows = CFG.players.map(p => {
+function computePlayers(teams, players) {
+  const rows = (players || []).map(p => {
     const ns = p.nations.filter(Boolean).map(n => teams[n]).filter(Boolean);
     const finishRanks = ns.map(t => FINISH_RANK[t.exit] != null ? FINISH_RANK[t.exit] : 0);
     return {
@@ -235,14 +311,15 @@ function renderStatusBar() {
     bar.querySelector("#btnExport").onclick = exportConfig;
     bar.querySelector("#btnRevert").onclick = () => {
       if (confirm("Discard your local changes and revert to the published data?")) {
-        CFG = deepCopy(PUBLISHED);
+        CFG = migrate(deepCopy(PUBLISHED));
+        CURRENT_SWEEP = Math.min(CURRENT_SWEEP, CFG.sweeps.length - 1);
         localStorage.removeItem(LS_CONFIG);
         renderAll();
       }
     };
   } else {
     bar.innerHTML =
-      '<span>Scorer mode on. Local data matches the published file.</span>' +
+      '<span>Admin mode on. Local data matches the published file.</span>' +
       '<span class="row-actions" style="margin:0">' +
       '<button class="btn secondary" id="btnImport">Import config2026.json</button>' +
       '</span>';
@@ -267,7 +344,8 @@ function importConfig() {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        CFG = JSON.parse(reader.result);
+        CFG = migrate(JSON.parse(reader.result));
+        CURRENT_SWEEP = Math.min(CURRENT_SWEEP, CFG.sweeps.length - 1);
         saveLocal(); renderAll();
         alert("Imported.");
       } catch (e) { alert("Could not read that file: " + e.message); }
@@ -280,17 +358,20 @@ function importConfig() {
 /* ---------- Live Ladder ---------- */
 function renderLadder() {
   const teams = computeTeams();
-  const rows = computePlayers(teams);
+  const sweep = getSweep();
+  const players = getPlayers();
+  const rows = computePlayers(teams, players);
   const hasTeams = allTeams().length > 0;
-  const setupDone = CFG.players.some(p => p.nations.filter(Boolean).length > 0);
+  const setupDone = players.some(p => p.nations.filter(Boolean).length > 0);
+  const sweepLabel = sweep ? sweep.name : "—";
   const updated = CFG.lastUpdated
     ? new Date(CFG.lastUpdated).toLocaleString()
     : "not yet updated";
 
   let body;
   if (!hasTeams || !setupDone) {
-    body = '<p class="empty-note">No players or nations set up yet. ' +
-      'Turn on <strong>Scorer mode</strong> and open the <strong>Setup</strong> tab to enter the teams and draw.</p>';
+    body = '<p class="empty-note">No players or nations set up yet for this sweep. ' +
+      'Turn on <strong>Admin mode</strong> and open the <strong>Setup</strong> tab to add players.</p>';
   } else {
     body = rows.map(r => {
       const chips = r.nations.map(n => {
@@ -328,7 +409,7 @@ function renderLadder() {
     '<button class="btn" id="btnShot">📸 Download ladder screenshot</button>' +
     "</div>" +
     '<div id="ladderCapture" class="ladder-capture">' +
-    '<div class="ladder-head"><h2>World Cup 2026 — Sweepstake Ladder</h2>' +
+    '<div class="ladder-head"><h2>World Cup 2026 — ' + esc(sweepLabel) + "</h2>" +
     '<span class="ladder-updated">Updated: ' + esc(updated) + "</span></div>" +
     body +
     "</div>" +
@@ -347,7 +428,9 @@ function screenshotLadder() {
   html2canvas(node, { backgroundColor: null, scale: 2 }).then(canvas => {
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/png");
-    a.download = "wc2026-ladder-" + new Date().toISOString().slice(0, 10) + ".png";
+    const sweep = getSweep();
+    const slug = sweep ? slugify(sweep.name) : "ladder";
+    a.download = "wc2026-" + slug + "-" + new Date().toISOString().slice(0, 10) + ".png";
     a.click();
   }).catch(e => alert("Screenshot failed: " + e.message));
 }
@@ -478,6 +561,103 @@ function onResultEdit(e) {
   renderLadder();
 }
 
+/* ---------- Draw view ---------- */
+function renderDraw() {
+  const view = document.getElementById("view-draw");
+  const sweep = getSweep();
+  if (!sweep || sweep.players.length === 0) {
+    view.innerHTML = '<p class="empty-note">No players in this sweep yet. ' +
+      'Add some in <strong>Setup</strong> (Admin mode).</p>';
+    return;
+  }
+  const tg = teamGroupMap();
+  const ranks = CFG.teamRanks || {};
+  const maxN = sweep.players.reduce((m, p) => Math.max(m, p.nations.length), 0);
+
+  const allRanked = sweep.players.every(p =>
+    p.nations.filter(Boolean).every(n => ranks[n] != null));
+  const anyPicks = sweep.players.some(p => p.nations.filter(Boolean).length > 0);
+
+  // table head
+  let head = "<th>Player</th>";
+  for (let i = 0; i < maxN; i++) head += "<th>Pick " + (i + 1) + "</th>";
+
+  // rows
+  const rowsHtml = sweep.players.map(p => {
+    let cells = "";
+    for (let i = 0; i < maxN; i++) {
+      const n = p.nations[i];
+      if (!n) { cells += '<td class="pick"><div class="chip empty">—</div></td>'; continue; }
+      const g = tg[n] || "";
+      const r = ranks[n];
+      cells += '<td class="pick"><div class="chip"' +
+        (g ? ' style="--gc:var(--gC-' + g + ')"' : '') + ">" +
+        '<div class="team">' + esc(n) + "</div>" +
+        '<div class="meta">' +
+        (g ? '<span class="grp">Grp ' + g + "</span>" : '') +
+        (r != null ? '<span class="rank">FIFA <b>#' + r + "</b></span>" : '') +
+        "</div></div></td>";
+    }
+    return '<tr><td class="name-cell">' + esc(p.name) + "</td>" + cells + "</tr>";
+  }).join("");
+
+  // draw strength (only when all picks have ranks)
+  let standingsHtml = "";
+  if (allRanked && anyPicks) {
+    const totals = sweep.players.map(p => {
+      const ranked = p.nations.filter(n => n && ranks[n] != null);
+      const s = ranked.reduce((a, n) => a + ranks[n], 0);
+      return { name: p.name, sum: s, count: ranked.length };
+    }).filter(t => t.count > 0).sort((a, b) => a.sum - b.sum);
+    if (totals.length > 1) {
+      const max = Math.max(...totals.map(t => t.sum));
+      const min = Math.min(...totals.map(t => t.sum));
+      const range = max - min || 1;
+      standingsHtml =
+        '<h2 class="section-title">Draw Strength</h2>' +
+        '<p class="section-note">Sum of FIFA rankings — the lower the total, the stronger the squad drawn. Best draw highlighted in gold.</p>' +
+        '<div class="standings">' +
+        totals.map((t, i) => {
+          const pct = 8 + 88 * (max - t.sum) / range;
+          const avg = (t.sum / t.count).toFixed(1);
+          return '<div class="scard' + (i === 0 ? " lead" : "") + '">' +
+            '<div class="top"><span class="pos">' + (i + 1) + "</span>" +
+            '<span class="who">' + esc(t.name) + "</span></div>" +
+            '<div class="stat"><span class="big">' + t.sum + "</span>" +
+            '<span class="avg">avg #' + avg + "</span></div>" +
+            '<div class="lab">Combined FIFA rank</div>' +
+            '<div class="bar"><i style="width:' + pct + '%"></i></div></div>';
+        }).join("") +
+        "</div>";
+    }
+  }
+
+  // legend
+  const tg2 = teamGroupMap();
+  const byGroup = {};
+  for (const g of Object.keys(CFG.groups)) {
+    byGroup[g] = CFG.groups[g].filter(Boolean);
+  }
+  const legendHtml =
+    '<div class="legend">' +
+    Object.keys(byGroup).map(g =>
+      '<div class="lg" style="--gc:var(--gC-' + g + ')">' +
+      '<span class="dot"></span><b>' + g + "</b>&nbsp;" +
+      esc(byGroup[g].join(" / ")) + "</div>").join("") +
+    "</div>";
+
+  view.innerHTML =
+    '<div class="draw-wrap">' +
+    "<h2>The Draw — " + esc(sweep.name) + "</h2>" +
+    '<p class="section-sub">Every pick mapped to its group A → L' +
+    (Object.keys(ranks).length ? " and FIFA World Ranking" : "") + ".</p>" +
+    '<div class="draw-scroller"><table class="draw-table"><thead><tr>' +
+    head + "</tr></thead><tbody>" + rowsHtml + "</tbody></table></div>" +
+    standingsHtml +
+    legendHtml +
+    "</div>";
+}
+
 /* ---------- Setup ---------- */
 function renderSetup() {
   const view = document.getElementById("view-setup");
@@ -497,74 +677,178 @@ function renderSetup() {
       '<div class="group-body">' + slots + "</div></div>";
   }
 
-  // players + nation picks
   const teamOpts = allTeams().sort();
-  const assigned = {};
-  CFG.players.forEach(p => p.nations.forEach(n => { if (n) assigned[n] = (assigned[n] || 0) + 1; }));
 
-  let playersHtml = "";
-  CFG.players.forEach((p, pi) => {
-    let picks = "";
-    p.nations.forEach((n, ni) => {
-      const opts = ['<option value="">— pick nation —</option>']
-        .concat(teamOpts.map(t => {
-          const dup = assigned[t] > 1 && t === n;
-          return '<option value="' + esc(t) + '"' + (t === n ? " selected" : "") + ">" +
-            esc(t) + (dup ? " ⚠" : "") + "</option>";
-        })).join("");
-      picks += '<select data-pl="' + pi + '" data-nat="' + ni + '"' + dis + ">" + opts + "</select>";
+  // sweeps
+  let sweepsHtml = "";
+  CFG.sweeps.forEach((sw, si) => {
+    const isCur = si === CURRENT_SWEEP;
+    const assigned = {};
+    sw.players.forEach(p => p.nations.forEach(n => { if (n) assigned[n] = (assigned[n] || 0) + 1; }));
+    const dups = Object.keys(assigned).filter(k => assigned[k] > 1);
+    const totalPicks = sum(sw.players.map(p => p.nations.filter(Boolean).length));
+
+    let playersHtml = "";
+    sw.players.forEach((p, pi) => {
+      let picks = "";
+      p.nations.forEach((n, ni) => {
+        const opts = ['<option value="">— pick nation —</option>']
+          .concat(teamOpts.map(t =>
+            '<option value="' + esc(t) + '"' + (t === n ? " selected" : "") + ">" +
+            esc(t) + (assigned[t] > 1 && t === n ? " ⚠" : "") + "</option>")).join("");
+        picks +=
+          '<div class="nation-pick">' +
+          '<select data-sw="' + si + '" data-pl="' + pi + '" data-nat="' + ni + '"' + dis + ">" + opts + "</select>" +
+          (ro ? "" : '<button class="btn-x" data-rmnat="' + si + ":" + pi + ":" + ni + '" title="Remove pick">✕</button>') +
+          "</div>";
+      });
+      playersHtml +=
+        '<div class="player-setup">' +
+        '<div class="player-head">' +
+        '<input type="text" data-pl-name="' + si + ":" + pi + '" value="' + esc(p.name) + '" placeholder="Player name"' + dis + ">" +
+        '<span class="section-sub" style="margin:0">' + p.nations.filter(Boolean).length + " nations</span>" +
+        (ro ? "" :
+          '<button class="btn-x" data-addnat="' + si + ":" + pi + '" title="Add a pick slot">+ pick</button>' +
+          '<button class="btn-x danger" data-rmpl="' + si + ":" + pi + '" title="Remove player">✕</button>') +
+        "</div>" +
+        '<div class="nation-picks">' + picks + "</div></div>";
     });
-    playersHtml +=
-      '<div class="player-setup card"><div class="player-head">' +
-      '<input type="text" data-pl="' + pi + '" data-f="name" value="' + esc(p.name) + '"' + dis + ">" +
-      '<span class="section-sub" style="margin:0">' + p.nations.filter(Boolean).length + " / 6 nations</span></div>" +
-      '<div class="nation-picks">' + picks + "</div></div>";
+
+    let summary = '<div class="assign-summary">' +
+      sw.players.length + " players · " + totalPicks + " picks · " +
+      Object.keys(assigned).length + " distinct nations chosen";
+    if (dups.length) summary += ' · <span class="warn">Duplicates: ' + esc(dups.join(", ")) + "</span>";
+    else if (totalPicks > 0 && totalPicks === Object.keys(assigned).length)
+      summary += ' · <span class="ok">No duplicates ✓</span>';
+    summary += "</div>";
+
+    sweepsHtml +=
+      '<div class="sweep-block' + (isCur ? " current" : "") + '">' +
+      '<div class="sweep-block-head">' +
+      '<input type="text" class="sweep-rename" data-swname="' + si + '" value="' + esc(sw.name) + '"' + dis + ">" +
+      (isCur
+        ? '<span class="tag-current">Currently viewing</span>'
+        : '<button class="btn secondary" data-swselect="' + si + '">View this sweep</button>') +
+      (ro || CFG.sweeps.length <= 1 ? "" :
+        '<button class="btn danger" data-delsw="' + si + '">Delete sweep</button>') +
+      "</div>" +
+      summary +
+      '<div class="sweep-players">' + playersHtml + "</div>" +
+      (ro ? "" :
+        '<div class="row-actions" style="margin-top:8px">' +
+        '<button class="btn secondary" data-addpl="' + si + '">+ Add player</button></div>') +
+      "</div>";
   });
 
-  // assignment summary
-  const teamsCount = teamOpts.length;
-  const picked = Object.keys(assigned).length;
-  const dups = Object.keys(assigned).filter(k => assigned[k] > 1);
-  const totalPicks = sum(CFG.players.map(p => p.nations.filter(Boolean).length));
-  let summary = '<div class="assign-summary">' +
-    teamsCount + " teams entered · " + totalPicks + " nation picks made · " +
-    picked + " distinct teams assigned. ";
-  if (dups.length) summary += '<span class="warn">Duplicates: ' + esc(dups.join(", ")) + "</span>";
-  else if (teamsCount === 48 && totalPicks === 48 && picked === 48)
-    summary += '<span class="ok">All 48 teams assigned, one per slot. ✓</span>';
-  summary += "</div>";
-
+  // header / intro
   view.innerHTML =
     "<h2>Setup</h2>" +
     '<p class="section-sub">' +
-    (ro ? "Read-only. Turn on Scorer mode to edit." :
-      "Enter the 12 groups (4 teams each), then assign 6 nations to each of the 8 players.") +
+    (ro ? "Read-only. Turn on Admin mode to edit."
+        : "Manage the shared draw (groups) and one or more sweeps. Match results live on the Results tab and apply to every sweep at once.") +
     "</p>" +
-    '<div class="card"><h2>Groups &amp; draw</h2>' +
+    '<div class="card"><h2>Groups &amp; draw <span class="section-sub" style="display:inline">· shared across all sweeps</span></h2>' +
     '<div class="setup-grid">' + groupsHtml + "</div></div>" +
-    '<div class="card"><h2>Players &amp; nations</h2>' + summary +
-    '<div style="margin-top:12px">' + playersHtml + "</div></div>";
+    '<div class="card"><h2>Sweeps</h2>' + sweepsHtml +
+    (ro ? "" :
+      '<div class="row-actions" style="margin-top:14px">' +
+      '<button class="btn" id="addSweep">+ Add new sweep</button></div>') +
+    "</div>";
 
-  if (!ro) {
-    view.querySelectorAll("input[data-grp]").forEach(inp => {
-      inp.addEventListener("change", () => {
-        CFG.groups[inp.dataset.grp][+inp.dataset.slot] = inp.value.trim();
-        saveLocal(); renderAll();
-      });
+  if (ro) return;
+
+  // ---- handlers ----
+  view.querySelectorAll("input[data-grp]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      CFG.groups[inp.dataset.grp][+inp.dataset.slot] = inp.value.trim();
+      saveLocal(); renderAll();
     });
-    view.querySelectorAll('input[data-f="name"]').forEach(inp => {
-      inp.addEventListener("change", () => {
-        CFG.players[+inp.dataset.pl].name = inp.value.trim();
-        saveLocal(); renderAll();
-      });
+  });
+  view.querySelectorAll("[data-swname]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      CFG.sweeps[+inp.dataset.swname].name = inp.value.trim() || "Sweep";
+      saveLocal(); renderAll();
     });
-    view.querySelectorAll("select[data-pl]").forEach(sel => {
-      sel.addEventListener("change", () => {
-        CFG.players[+sel.dataset.pl].nations[+sel.dataset.nat] = sel.value;
-        saveLocal(); renderAll();
-      });
+  });
+  view.querySelectorAll("[data-swselect]").forEach(btn => {
+    btn.onclick = () => {
+      CURRENT_SWEEP = +btn.dataset.swselect;
+      localStorage.setItem(LS_CURSWEEP, String(CURRENT_SWEEP));
+      ACTIVE_VIEW = "ladder";
+      renderAll();
+    };
+  });
+  view.querySelectorAll("[data-delsw]").forEach(btn => {
+    btn.onclick = () => {
+      const i = +btn.dataset.delsw;
+      const nm = CFG.sweeps[i].name;
+      if (CFG.sweeps.length <= 1) { alert("Cannot delete the last sweep."); return; }
+      if (!confirm('Delete sweep "' + nm + '"? This removes all its players.')) return;
+      CFG.sweeps.splice(i, 1);
+      if (CURRENT_SWEEP >= CFG.sweeps.length) CURRENT_SWEEP = CFG.sweeps.length - 1;
+      localStorage.setItem(LS_CURSWEEP, String(CURRENT_SWEEP));
+      saveLocal(); renderAll();
+    };
+  });
+  view.querySelectorAll("[data-pl-name]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const [si, pi] = inp.dataset.plName.split(":").map(Number);
+      CFG.sweeps[si].players[pi].name = inp.value.trim();
+      saveLocal(); renderAll();
     });
-  }
+  });
+  view.querySelectorAll("[data-sw][data-pl][data-nat]").forEach(sel => {
+    sel.addEventListener("change", () => {
+      const si = +sel.dataset.sw, pi = +sel.dataset.pl, ni = +sel.dataset.nat;
+      CFG.sweeps[si].players[pi].nations[ni] = sel.value;
+      saveLocal(); renderAll();
+    });
+  });
+  view.querySelectorAll("[data-rmnat]").forEach(btn => {
+    btn.onclick = () => {
+      const [si, pi, ni] = btn.dataset.rmnat.split(":").map(Number);
+      CFG.sweeps[si].players[pi].nations.splice(ni, 1);
+      saveLocal(); renderAll();
+    };
+  });
+  view.querySelectorAll("[data-addnat]").forEach(btn => {
+    btn.onclick = () => {
+      const [si, pi] = btn.dataset.addnat.split(":").map(Number);
+      CFG.sweeps[si].players[pi].nations.push("");
+      saveLocal(); renderAll();
+    };
+  });
+  view.querySelectorAll("[data-rmpl]").forEach(btn => {
+    btn.onclick = () => {
+      const [si, pi] = btn.dataset.rmpl.split(":").map(Number);
+      const nm = CFG.sweeps[si].players[pi].name || "this player";
+      if (!confirm("Remove " + nm + "?")) return;
+      CFG.sweeps[si].players.splice(pi, 1);
+      saveLocal(); renderAll();
+    };
+  });
+  view.querySelectorAll("[data-addpl]").forEach(btn => {
+    btn.onclick = () => {
+      const si = +btn.dataset.addpl;
+      const n = CFG.sweeps[si].players[0] ? CFG.sweeps[si].players[0].nations.length : 6;
+      CFG.sweeps[si].players.push({ name: "New player", nations: new Array(n).fill("") });
+      saveLocal(); renderAll();
+    };
+  });
+  const add = view.querySelector("#addSweep");
+  if (add) add.onclick = () => {
+    const nm = (prompt("Name for the new sweep:", "New Sweep") || "").trim();
+    if (!nm) return;
+    const ppl = parseInt(prompt("How many players?", "8"), 10);
+    const nat = parseInt(prompt("Nations per player?", "6"), 10);
+    if (!ppl || !nat || ppl < 1 || nat < 1) return;
+    const players = [];
+    for (let i = 0; i < ppl; i++) players.push({ name: "Player " + (i + 1), nations: new Array(nat).fill("") });
+    CFG.sweeps.push({ id: slugify(nm) + "-" + Date.now().toString(36), name: nm, players });
+    CURRENT_SWEEP = CFG.sweeps.length - 1;
+    localStorage.setItem(LS_CURSWEEP, String(CURRENT_SWEEP));
+    saveLocal(); renderAll();
+  };
 }
 
 /* ---------- Archive ---------- */
@@ -586,7 +870,7 @@ function renderArchive() {
   }
 
   view.innerHTML =
-    "<h2>Overall Stats</h2>" +
+    "<h2>Overall - " + esc(CFG.brand || "Banterade") + "</h2>" +
     '<p class="section-sub">Honours board, most-picked nations, and the full record from every past sweepstake.</p>' +
     '<div class="archive-tabs">' + tabs + "</div>" + body;
 
@@ -611,7 +895,7 @@ function renderTournament(t) {
     }).join(", ");
     let r = '<tr class="' + (champ ? "champ" : "") + '">' +
       '<td class="num">' + s.rank + (champ ? " 🏆" : "") + "</td>" +
-      "<td><strong>" + esc(s.player) + "</strong></td>" +
+      "<td><strong>" + esc(firstName(s.player)) + "</strong></td>" +
       '<td class="hist-nations">' + nats + "</td>" +
       '<td class="num"><strong>' + s.pts + "</strong></td>";
     if (showGp) r += '<td class="num">' + (s.gp != null ? s.gp : "—") + "</td>";
@@ -623,7 +907,7 @@ function renderTournament(t) {
     "<h2>" + esc(t.name) + ' <span class="section-sub" style="display:inline">· ' +
     esc(t.host) + "</span></h2>" +
     '<p class="section-sub">' + esc(t.format) + " · Champion: " +
-    esc(t.champions.join(" &amp; ")) + (t.notes ? " · " + esc(t.notes) : "") + "</p>" +
+    esc(t.champions.map(firstName).join(" & ")) + (t.notes ? " · " + esc(t.notes) : "") + "</p>" +
     '<table class="hist"><thead><tr>' + head + "</tr></thead><tbody>" +
     rows + "</tbody></table>" +
     '<p class="section-sub" style="margin-top:8px">Number after each nation = points it scored for that player.</p>' +
@@ -633,7 +917,7 @@ function renderTournament(t) {
 
 function renderHonours(ts) {
   const stat = {};
-  const nationCounts = {};
+  const nationCounts = {}; // keyed by first name so historical + 2026 picks merge
   ts.forEach(t => {
     t.standings.forEach(s => {
       const k = s.player;
@@ -643,9 +927,21 @@ function renderHonours(ts) {
       if (t.champions.includes(k)) stat[k].titles++;
       if (s.rank <= 3) stat[k].podiums++;
       stat[k].best = Math.min(stat[k].best, s.rank);
-      nationCounts[k] = nationCounts[k] || {};
+      const nk = firstName(s.player);
+      nationCounts[nk] = nationCounts[nk] || {};
       s.nations.forEach(nat => {
-        nationCounts[k][nat.team] = (nationCounts[k][nat.team] || 0) + 1;
+        nationCounts[nk][nat.team] = (nationCounts[nk][nat.team] || 0) + 1;
+      });
+    });
+  });
+  // Include picks from every current 2026 sweep
+  (CFG.sweeps || []).forEach(sw => {
+    sw.players.forEach(p => {
+      const nk = firstName(p.name);
+      if (!nk) return;
+      nationCounts[nk] = nationCounts[nk] || {};
+      p.nations.forEach(team => {
+        if (team) nationCounts[nk][team] = (nationCounts[nk][team] || 0) + 1;
       });
     });
   });
@@ -653,7 +949,7 @@ function renderHonours(ts) {
     b.titles - a.titles || b.podiums - a.podiums || a.best - b.best || b.points - a.points);
 
   const honoursRows = ordered.map(s =>
-    "<tr><td><strong>" + esc(s.player) + "</strong></td>" +
+    "<tr><td><strong>" + esc(firstName(s.player)) + "</strong></td>" +
     '<td class="num">' + s.played + "</td>" +
     '<td class="num">' + (s.titles ? "🏆".repeat(s.titles) + " " + s.titles : "—") + "</td>" +
     '<td class="num">' + s.podiums + "</td>" +
@@ -662,12 +958,12 @@ function renderHonours(ts) {
   ).join("");
 
   const nationRows = ordered.map(s => {
-    const list = Object.entries(nationCounts[s.player] || {})
+    const list = Object.entries(nationCounts[firstName(s.player)] || {})
+      .filter(([, c]) => c > 1)
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-      .slice(0, 5)
-      .map(([team, c]) => esc(team) + (c > 1 ? " <strong>×" + c + "</strong>" : ""))
+      .map(([team, c]) => esc(team) + " <strong>×" + c + "</strong>")
       .join(", ");
-    return "<tr><td><strong>" + esc(s.player) + "</strong></td>" +
+    return "<tr><td><strong>" + esc(firstName(s.player)) + "</strong></td>" +
       '<td class="hist-nations">' + (list || "—") + "</td></tr>";
   }).join("");
 
@@ -680,8 +976,8 @@ function renderHonours(ts) {
     "<th>Best finish</th><th>Total pts</th>" +
     "</tr></thead><tbody>" + honoursRows + "</tbody></table></div>" +
     '<div class="card"><h2>Most-picked nations</h2>' +
-    '<p class="section-sub">Each player\'s five most frequently drawn nations across past sweeps. ' +
-    "A count is shown when a nation has been picked more than once.</p>" +
+    '<p class="section-sub">Nations a player has drawn more than once, across past sweeps and the current 2026 sweep. ' +
+    'Players with no repeats show "—".</p>' +
     '<table class="hist"><thead><tr>' +
     "<th>Player</th><th>Top nations</th>" +
     "</tr></thead><tbody>" + nationRows + "</tbody></table></div>"

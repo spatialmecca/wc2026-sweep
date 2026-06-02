@@ -9,12 +9,18 @@ GitHub Pages.
 
 ## Features
 
+- **Multiple sweeps in one app** — run an Office Sweep, a Family Sweep, etc. side
+  by side. One admin enters match results once and every sweep's ladder updates.
 - **Live Ladder** — player standings with live scoring, status (IN/OUT) and a
   one-click PNG screenshot for sharing in the group chat.
-- **Results** — enter group-stage and knockout scores; the ladder updates instantly.
-- **Setup** — enter the 12 groups and assign 6 nations to each of the 8 players.
-- **Archive** — the four past sweepstakes plus an all-time honours board.
-- **Scorer mode** — one nominated person edits; everyone else sees a read-only ladder.
+- **Draw** — colour-coded visual of every player's picks, plus a "Draw Strength"
+  ranking (when FIFA team rankings are supplied) showing whose squad is strongest.
+- **Results** — enter group-stage and knockout scores; ladders update instantly.
+- **Setup** — manage the shared 48-team draw and edit each sweep's players and
+  their nation picks (flexible player counts and picks-per-player).
+- **Overall Stats** — honours board and most-picked nations across the four past
+  sweepstakes (2018, 2020, 2022, 2024).
+- **Admin mode** — one nominated person edits; everyone else sees read-only views.
 
 ## Running it locally
 
@@ -45,7 +51,7 @@ viewer sees.
 
 The **nominated scorer** workflow:
 
-1. Open the site, turn on **Scorer mode** (top right).
+1. Open the site, turn on **Admin mode** (top right).
 2. Edit in the **Setup** and **Results** tabs. Changes are saved in your browser
    immediately (so you cannot lose them), but they are *local to your browser only*.
 3. A yellow bar appears: **Export config2026.json**. Click it to download the file.
@@ -54,7 +60,7 @@ The **nominated scorer** workflow:
 5. Everyone else reloads the page and sees the update.
 
 The **Import config2026.json** button does the reverse — load a file someone sent
-you. Viewers can toggle Scorer mode and experiment, but their changes never affect
+you. Viewers can toggle Admin mode and experiment, but their changes never affect
 anyone else: only the committed file is shared.
 
 > Tip: the **Discard local changes** button reverts your browser back to the

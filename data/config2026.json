@@ -1,6 +1,7 @@
 {
   "tournament": "FIFA World Cup 2026",
   "season": "2026",
+  "brand": "Banterade",
   "lastUpdated": "",
   "pointsRules": {
     "groupWin": 3,
@@ -29,16 +30,36 @@
     "K": ["Portugal", "Uzbekistan", "Colombia", "Congo DR"],
     "L": ["England", "Croatia", "Ghana", "Panama"]
   },
-  "players": [
-    { "name": "Adrian", "nations": ["", "", "", "", "", ""] },
-    { "name": "Damian", "nations": ["", "", "", "", "", ""] },
-    { "name": "Daniel", "nations": ["", "", "", "", "", ""] },
-    { "name": "Jake", "nations": ["", "", "", "", "", ""] },
-    { "name": "Mark", "nations": ["", "", "", "", "", ""] },
-    { "name": "Michael", "nations": ["", "", "", "", "", ""] },
-    { "name": "Simon", "nations": ["", "", "", "", "", ""] },
-    { "name": "Swanson", "nations": ["", "", "", "", "", ""] }
-  ],
+  "teamRanks": {
+    "Mexico": 15, "South Africa": 60, "Korea Republic": 25, "Czechia": 41,
+    "Canada": 30, "Switzerland": 14, "Qatar": 35, "Bosnia and Herzegovina": 52,
+    "Brazil": 6, "Morocco": 8, "Haiti": 83, "Scotland": 47,
+    "United States": 16, "Paraguay": 64, "Australia": 24, "Türkiye": 42,
+    "Germany": 10, "Curaçao": 81, "Côte d’Ivoire": 33, "Ecuador": 28,
+    "Netherlands": 7, "Japan": 17, "Tunisia": 40, "Sweden": 39,
+    "Belgium": 9, "Egypt": 29, "Iran": 18, "New Zealand": 95,
+    "Spain": 2, "Cabo Verde": 70, "Saudi Arabia": 57, "Uruguay": 13,
+    "France": 1, "Senegal": 21, "Norway": 44, "Iraq": 61,
+    "Argentina": 3, "Algeria": 36, "Austria": 23, "Jordan": 68,
+    "Portugal": 5, "Uzbekistan": 62, "Colombia": 15, "Congo DR": 51,
+    "England": 4, "Croatia": 11, "Ghana": 65, "Panama": 53
+  },
   "groupResults": {},
-  "knockoutMatches": []
+  "knockoutMatches": [],
+  "sweeps": [
+    {
+      "id": "banterade",
+      "name": "Banterade",
+      "players": [
+        { "name": "Adrian", "nations": ["Brazil", "Croatia", "Iran", "Canada", "South Africa", "Uzbekistan"] },
+        { "name": "Damian", "nations": ["Argentina", "Germany", "Austria", "Qatar", "Saudi Arabia", "Paraguay"] },
+        { "name": "Daniel", "nations": ["Morocco", "Belgium", "Korea Republic", "Czechia", "Bosnia and Herzegovina", "Curaçao"] },
+        { "name": "Jake", "nations": ["England", "Colombia", "Egypt", "Côte d’Ivoire", "Scotland", "Ghana"] },
+        { "name": "Mark", "nations": ["France", "Mexico", "Australia", "Algeria", "Congo DR", "New Zealand"] },
+        { "name": "Michael", "nations": ["Portugal", "Switzerland", "Japan", "Tunisia", "Norway", "Cabo Verde"] },
+        { "name": "Simon", "nations": ["Spain", "Uruguay", "Ecuador", "Türkiye", "Iraq", "Haiti"] },
+        { "name": "Swanson", "nations": ["Netherlands", "United States", "Senegal", "Sweden", "Panama", "Jordan"] }
+      ]
+    }
+  ]
 }

@@ -60,6 +60,20 @@
         { "name": "Simon", "nations": ["Spain", "Uruguay", "Ecuador", "Türkiye", "Iraq", "Haiti"] },
         { "name": "Swanson", "nations": ["Netherlands", "United States", "Senegal", "Sweden", "Panama", "Jordan"] }
       ]
+    },
+    {
+      "id": "tamaseri",
+      "name": "Tamaseri",
+      "players": [
+        { "name": "Danny", "nations": ["France", "Mexico", "Japan", "Tunisia", "South Africa", "Paraguay"] },
+        { "name": "Rob", "nations": ["Morocco", "Belgium", "Egypt", "Côte d’Ivoire", "Saudi Arabia", "Curaçao"] },
+        { "name": "Dan P.", "nations": ["Portugal", "United States", "Senegal", "Czechia", "Bosnia and Herzegovina", "Jordan"] },
+        { "name": "Joe", "nations": ["Brazil", "Croatia", "Ecuador", "Sweden", "Norway", "Haiti"] },
+        { "name": "Julz", "nations": ["Spain", "Germany", "Austria", "Canada", "Scotland", "New Zealand"] },
+        { "name": "Michael", "nations": ["Argentina", "Colombia", "Australia", "Türkiye", "Panama", "Cabo Verde"] },
+        { "name": "Aaron", "nations": ["Netherlands", "Switzerland", "Iran", "Algeria", "Congo DR", "Uzbekistan"] },
+        { "name": "Adi", "nations": ["England", "Uruguay", "Korea Republic", "Qatar", "Iraq", "Ghana"] }
+      ]
     }
   ]
 }

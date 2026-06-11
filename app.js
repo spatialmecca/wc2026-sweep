@@ -73,6 +73,7 @@ function renderAll() {
   renderStatusBar();
   renderLadder();
   renderDraw();
+  renderGamedays();
   renderResults();
   renderSetup();
   renderArchive();
@@ -88,6 +89,7 @@ function renderTabs() {
     html += '<button class="tab' + (lActive ? " active" : "") + '" data-view="ladder" data-sweep="' + i + '">Table - ' + esc(sw.name) + "</button>";
     html += '<button class="tab' + (dActive ? " active" : "") + '" data-view="draw" data-sweep="' + i + '">Draw - ' + esc(sw.name) + "</button>";
   });
+  html += '<button class="tab' + (ACTIVE_VIEW === "gamedays" ? " active" : "") + '" data-view="gamedays">Gamedays</button>';
   html += '<button class="tab' + (ACTIVE_VIEW === "archive" ? " active" : "") + '" data-view="archive">Overall - ' + esc(brand) + "</button>";
   html += '<button class="tab' + (ACTIVE_VIEW === "results" ? " active" : "") + '" data-view="results">Results</button>';
   html += '<button class="tab' + (ACTIVE_VIEW === "setup" ? " active" : "") + '" data-view="setup">Setup</button>';
@@ -138,6 +140,8 @@ function migrate(c) {
   });
   if (!c.teamRanks) c.teamRanks = {};
   if (!c.brand) c.brand = "Banterade";
+  if (!c.schedule) c.schedule = {};
+  if (!c.gamedayDates) c.gamedayDates = {};
   return c;
 }
 
@@ -656,6 +660,207 @@ function renderDraw() {
     standingsHtml +
     legendHtml +
     "</div>";
+}
+
+/* ---------- Gamedays ---------- */
+function ownersForSweep(sweepIdx) {
+  const m = {};
+  const sw = CFG.sweeps[sweepIdx];
+  if (!sw) return m;
+  sw.players.forEach(p => { p.nations.forEach(n => { if (n) m[n] = p.name; }); });
+  return m;
+}
+
+function listFixtures() {
+  // Returns [{ matchId, gameday, round, teamA, teamB, scoreA, scoreB, group? }]
+  const out = [];
+  for (const g of Object.keys(CFG.groups)) {
+    FIXTURES.forEach((pair, mi) => {
+      const id = g + "-" + mi;
+      const tA = CFG.groups[g][pair[0]], tB = CFG.groups[g][pair[1]];
+      if (!tA || !tB) return;
+      const r = CFG.groupResults[id] || {};
+      const gd = CFG.schedule[id];
+      out.push({
+        kind: "group", matchId: id, group: g, gameday: gd != null ? +gd : null,
+        round: "Group " + g,
+        teamA: tA, teamB: tB,
+        scoreA: r.a != null && r.a !== "" ? +r.a : null,
+        scoreB: r.b != null && r.b !== "" ? +r.b : null
+      });
+    });
+  }
+  CFG.knockoutMatches.forEach((m, idx) => {
+    out.push({
+      kind: "ko", matchId: "ko-" + idx, koIdx: idx,
+      gameday: m.gameday != null && m.gameday !== "" ? +m.gameday : null,
+      round: m.round || "KO",
+      teamA: m.teamA, teamB: m.teamB,
+      scoreA: m.scoreA != null && m.scoreA !== "" ? +m.scoreA : null,
+      scoreB: m.scoreB != null && m.scoreB !== "" ? +m.scoreB : null,
+      pensA: m.pensA, pensB: m.pensB
+    });
+  });
+  return out;
+}
+
+function renderGamedays() {
+  const view = document.getElementById("view-gamedays");
+  const ro = !SCORER;
+  const all = listFixtures();
+  const scheduled = all.filter(f => f.gameday != null);
+  const unscheduled = all.filter(f => f.gameday == null);
+
+  // group by gameday
+  const byDay = {};
+  scheduled.forEach(f => { (byDay[f.gameday] = byDay[f.gameday] || []).push(f); });
+  const days = Object.keys(byDay).map(Number).sort((a, b) => a - b);
+
+  // build per-day blocks
+  let blocksHtml = "";
+  days.forEach(dn => {
+    const fixtures = byDay[dn].sort((a, b) =>
+      (a.kind === b.kind ? 0 : a.kind === "group" ? -1 : 1) ||
+      a.matchId.localeCompare(b.matchId));
+    const dateVal = CFG.gamedayDates[String(dn)] || "";
+    const headDate = dateVal ? formatDate(dateVal) : "";
+
+    // one card per sweep
+    let sweepCards = "";
+    CFG.sweeps.forEach((sw, si) => {
+      const owners = ownersForSweep(si);
+      const fixturesHtml = fixtures.map(f => {
+        const ownerA = owners[f.teamA] || "—";
+        const ownerB = owners[f.teamB] || "—";
+        const hasScore = f.scoreA != null && f.scoreB != null;
+        const scoreText = hasScore ? '<div class="gd-score">' + f.scoreA + " — " + f.scoreB + "</div>" : "";
+        return '<div class="gd-fixture">' +
+          '<div class="gd-round-tag">' + esc(f.round) + "</div>" +
+          '<div class="gd-team gd-team-a">' +
+          '<div class="gd-team-name">' + esc(f.teamA) + "</div>" +
+          '<div class="gd-team-owner">' + esc(ownerA) + "</div>" +
+          "</div>" +
+          (hasScore ? scoreText : '<div class="gd-vs">v</div>') +
+          '<div class="gd-team gd-team-b">' +
+          '<div class="gd-team-name">' + esc(f.teamB) + "</div>" +
+          '<div class="gd-team-owner">' + esc(ownerB) + "</div>" +
+          "</div>" +
+          "</div>";
+      }).join("");
+      sweepCards +=
+        '<div class="gd-graphic-wrap">' +
+        '<button class="btn btn-shot" data-shot="gd-capture-' + dn + "-" + si + '">📸 Download</button>' +
+        '<div class="gd-capture" id="gd-capture-' + dn + "-" + si + '">' +
+        '<div class="gd-card-head">' +
+        '<div class="gd-card-day">Gameday ' + dn + "</div>" +
+        (headDate ? '<div class="gd-card-date">' + esc(headDate) + "</div>" : "") +
+        '<div class="gd-card-sweep">' + esc(sw.name) + "</div>" +
+        "</div>" +
+        '<div class="gd-fixtures">' + fixturesHtml + "</div>" +
+        '<div class="gd-card-foot">' + esc(sw.name) + " · World Cup 2026 sweep</div>" +
+        "</div>" +
+        "</div>";
+    });
+
+    blocksHtml +=
+      '<div class="gameday-block">' +
+      '<div class="gameday-block-head">' +
+      "<h2>Gameday " + dn + "</h2>" +
+      (ro
+        ? (headDate ? '<span class="section-sub" style="margin:0">' + esc(headDate) + "</span>" : "")
+        : '<input type="date" data-gddate="' + dn + '" value="' + esc(dateVal) + '"> ' +
+          '<button class="btn-x danger" data-deldate="' + dn + '">Clear date</button>') +
+      "</div>" +
+      '<div class="gd-graphics">' + sweepCards + "</div>" +
+      "</div>";
+  });
+
+  // admin scheduling panel
+  let adminHtml = "";
+  if (!ro) {
+    const rows = all.map(f => {
+      const cur = f.gameday != null ? f.gameday : "";
+      return '<tr><td>' + esc(f.round) + "</td>" +
+        "<td>" + esc(f.teamA) + " v " + esc(f.teamB) + "</td>" +
+        '<td><input type="number" min="1" max="60" style="width:70px" data-sched="' +
+        esc(f.matchId) + '" value="' + cur + '" placeholder="—"></td></tr>';
+    }).join("");
+    adminHtml =
+      '<div class="card"><h2>Assign gamedays</h2>' +
+      '<p class="section-sub">' + scheduled.length + " of " + all.length +
+      " matches have a gameday. Enter a small number (1, 2, 3…) to group them.</p>" +
+      '<div class="schedule-scroll"><table class="schedule-table">' +
+      "<thead><tr><th>Round</th><th>Match</th><th>GD</th></tr></thead><tbody>" +
+      rows + "</tbody></table></div></div>";
+  } else if (days.length === 0) {
+    adminHtml = '<p class="empty-note">No gamedays scheduled yet. ' +
+      'Turn on <strong>Admin mode</strong> and use the scheduling panel here to assign each match a gameday number.</p>';
+  }
+
+  view.innerHTML =
+    "<h2>Gamedays</h2>" +
+    '<p class="section-sub">One screenshot-ready graphic per sweep, per gameday. Tap 📸 to download.</p>' +
+    blocksHtml + adminHtml;
+
+  // handlers
+  view.querySelectorAll("[data-shot]").forEach(btn => {
+    btn.onclick = () => screenshotNode(btn.dataset.shot);
+  });
+  if (!ro) {
+    view.querySelectorAll("input[data-gddate]").forEach(inp => {
+      inp.addEventListener("change", () => {
+        const dn = inp.dataset.gddate;
+        if (inp.value) CFG.gamedayDates[dn] = inp.value;
+        else delete CFG.gamedayDates[dn];
+        saveLocal(); renderGamedays();
+      });
+    });
+    view.querySelectorAll("[data-deldate]").forEach(btn => {
+      btn.onclick = () => {
+        delete CFG.gamedayDates[btn.dataset.deldate];
+        saveLocal(); renderGamedays();
+      };
+    });
+    view.querySelectorAll("input[data-sched]").forEach(inp => {
+      inp.addEventListener("change", () => {
+        const id = inp.dataset.sched;
+        const v = inp.value === "" ? null : parseInt(inp.value, 10);
+        if (id.startsWith("ko-")) {
+          const idx = +id.slice(3);
+          if (CFG.knockoutMatches[idx]) {
+            if (v == null) delete CFG.knockoutMatches[idx].gameday;
+            else CFG.knockoutMatches[idx].gameday = v;
+          }
+        } else {
+          if (v == null) delete CFG.schedule[id];
+          else CFG.schedule[id] = v;
+        }
+        saveLocal(); renderGamedays();
+      });
+    });
+  }
+}
+
+function formatDate(iso) {
+  if (!iso) return "";
+  const d = new Date(iso + "T00:00:00");
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+}
+
+function screenshotNode(id) {
+  const node = document.getElementById(id);
+  if (!node) return;
+  if (typeof html2canvas !== "function") {
+    alert("Screenshot library not loaded.");
+    return;
+  }
+  html2canvas(node, { backgroundColor: null, scale: 2 }).then(canvas => {
+    const a = document.createElement("a");
+    a.href = canvas.toDataURL("image/png");
+    a.download = id + "-" + new Date().toISOString().slice(0, 10) + ".png";
+    a.click();
+  }).catch(e => alert("Screenshot failed: " + e.message));
 }
 
 /* ---------- Setup ---------- */

@@ -401,6 +401,94 @@ table.draw-table .name-cell {
   background: var(--gc, #5a6b8c);
 }
 
+/* Gamedays */
+.gameday-block {
+  margin-bottom: 28px;
+}
+.gameday-block-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px; flex-wrap: wrap;
+}
+.gameday-block-head h2 { margin: 0; }
+.gd-graphics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+.gd-graphic-wrap { display: flex; flex-direction: column; gap: 8px; }
+.btn.btn-shot { align-self: flex-start; font-size: 0.82rem; padding: 7px 12px; }
+.gd-capture {
+  background: linear-gradient(160deg, #14264a 0%, #1f6b41 140%);
+  border-radius: 14px; padding: 18px 18px 14px;
+  color: #fff; box-shadow: 0 16px 36px -20px rgba(0,0,0,0.5);
+}
+.gd-card-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.18); padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.gd-card-day {
+  font-size: 1.25rem; font-weight: 800; letter-spacing: 0.01em;
+}
+.gd-card-date {
+  font-size: 0.78rem; color: #b9c6da;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.gd-card-sweep {
+  margin-left: auto; background: var(--gold); color: #3a2700;
+  font-weight: 700; font-size: 0.78rem;
+  padding: 3px 10px; border-radius: 10px;
+}
+.gd-fixtures { display: flex; flex-direction: column; gap: 8px; }
+.gd-fixture {
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr;
+  align-items: center; gap: 8px;
+  padding: 10px 4px;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.gd-fixtures .gd-fixture:last-child { border-bottom: none; }
+.gd-round-tag {
+  position: absolute; top: 2px; left: 4px;
+  font-size: 0.62rem; letter-spacing: 0.08em;
+  color: #9fb0c8; text-transform: uppercase;
+}
+.gd-team-name { font-weight: 700; font-size: 0.95rem; line-height: 1.15; }
+.gd-team-owner {
+  font-size: 0.75rem; color: #ffd57a;
+  letter-spacing: 0.04em; margin-top: 3px;
+}
+.gd-team-a { text-align: right; }
+.gd-team-b { text-align: left; }
+.gd-vs, .gd-score {
+  text-align: center; font-weight: 700; color: #b9c6da;
+}
+.gd-score {
+  font-size: 1.1rem; color: #fff;
+  background: rgba(255,255,255,0.12); padding: 3px 6px; border-radius: 6px;
+}
+.gd-card-foot {
+  font-size: 0.66rem; color: #8da0bf;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-top: 12px; text-align: center;
+}
+
+/* Schedule admin table */
+.schedule-scroll {
+  max-height: 360px; overflow-y: auto; border: 1px solid var(--line);
+  border-radius: 8px; margin-top: 8px;
+}
+.schedule-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.schedule-table th, .schedule-table td { padding: 6px 10px; text-align: left; }
+.schedule-table thead th {
+  position: sticky; top: 0; background: #f4f6f9;
+  border-bottom: 1px solid var(--line); font-size: 0.74rem;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em;
+}
+.schedule-table tbody tr { border-bottom: 1px solid var(--line); }
+.schedule-table tbody tr:last-child { border-bottom: none; }
+
 @media (max-width: 620px) {
   .app-header h1 { font-size: 1rem; }
   table.ladder th.col-gf, table.ladder td.col-gf { display: none; }

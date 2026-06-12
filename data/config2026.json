@@ -2,7 +2,7 @@
   "tournament": "FIFA World Cup 2026",
   "season": "2026",
   "brand": "Banterade",
-  "lastUpdated": "",
+  "lastUpdated": "2026-06-12T04:36:13.540Z",
   "pointsRules": {
     "groupWin": 3,
     "groupDraw": 1,
@@ -17,84 +17,420 @@
     "winner": 14
   },
   "groups": {
-    "A": ["Mexico", "South Africa", "Korea Republic", "Czechia"],
-    "B": ["Canada", "Switzerland", "Qatar", "Bosnia and Herzegovina"],
-    "C": ["Brazil", "Morocco", "Haiti", "Scotland"],
-    "D": ["United States", "Paraguay", "Australia", "Türkiye"],
-    "E": ["Germany", "Curaçao", "Côte d’Ivoire", "Ecuador"],
-    "F": ["Netherlands", "Japan", "Tunisia", "Sweden"],
-    "G": ["Belgium", "Egypt", "Iran", "New Zealand"],
-    "H": ["Spain", "Cabo Verde", "Saudi Arabia", "Uruguay"],
-    "I": ["France", "Senegal", "Norway", "Iraq"],
-    "J": ["Argentina", "Algeria", "Austria", "Jordan"],
-    "K": ["Portugal", "Uzbekistan", "Colombia", "Congo DR"],
-    "L": ["England", "Croatia", "Ghana", "Panama"]
+    "A": [
+      "Mexico",
+      "South Africa",
+      "Korea Republic",
+      "Czechia"
+    ],
+    "B": [
+      "Canada",
+      "Switzerland",
+      "Qatar",
+      "Bosnia and Herzegovina"
+    ],
+    "C": [
+      "Brazil",
+      "Morocco",
+      "Haiti",
+      "Scotland"
+    ],
+    "D": [
+      "United States",
+      "Paraguay",
+      "Australia",
+      "Türkiye"
+    ],
+    "E": [
+      "Germany",
+      "Curaçao",
+      "Côte d’Ivoire",
+      "Ecuador"
+    ],
+    "F": [
+      "Netherlands",
+      "Japan",
+      "Tunisia",
+      "Sweden"
+    ],
+    "G": [
+      "Belgium",
+      "Egypt",
+      "Iran",
+      "New Zealand"
+    ],
+    "H": [
+      "Spain",
+      "Cabo Verde",
+      "Saudi Arabia",
+      "Uruguay"
+    ],
+    "I": [
+      "France",
+      "Senegal",
+      "Norway",
+      "Iraq"
+    ],
+    "J": [
+      "Argentina",
+      "Algeria",
+      "Austria",
+      "Jordan"
+    ],
+    "K": [
+      "Portugal",
+      "Uzbekistan",
+      "Colombia",
+      "Congo DR"
+    ],
+    "L": [
+      "England",
+      "Croatia",
+      "Ghana",
+      "Panama"
+    ]
   },
   "teamRanks": {
-    "Mexico": 15, "South Africa": 60, "Korea Republic": 25, "Czechia": 41,
-    "Canada": 30, "Switzerland": 14, "Qatar": 35, "Bosnia and Herzegovina": 52,
-    "Brazil": 6, "Morocco": 8, "Haiti": 83, "Scotland": 47,
-    "United States": 16, "Paraguay": 64, "Australia": 24, "Türkiye": 42,
-    "Germany": 10, "Curaçao": 81, "Côte d’Ivoire": 33, "Ecuador": 28,
-    "Netherlands": 7, "Japan": 17, "Tunisia": 40, "Sweden": 39,
-    "Belgium": 9, "Egypt": 29, "Iran": 18, "New Zealand": 95,
-    "Spain": 2, "Cabo Verde": 70, "Saudi Arabia": 57, "Uruguay": 13,
-    "France": 1, "Senegal": 21, "Norway": 44, "Iraq": 61,
-    "Argentina": 3, "Algeria": 36, "Austria": 23, "Jordan": 68,
-    "Portugal": 5, "Uzbekistan": 62, "Colombia": 15, "Congo DR": 51,
-    "England": 4, "Croatia": 11, "Ghana": 65, "Panama": 53
+    "Mexico": 15,
+    "South Africa": 60,
+    "Korea Republic": 25,
+    "Czechia": 41,
+    "Canada": 30,
+    "Switzerland": 14,
+    "Qatar": 35,
+    "Bosnia and Herzegovina": 52,
+    "Brazil": 6,
+    "Morocco": 8,
+    "Haiti": 83,
+    "Scotland": 47,
+    "United States": 16,
+    "Paraguay": 64,
+    "Australia": 24,
+    "Türkiye": 42,
+    "Germany": 10,
+    "Curaçao": 81,
+    "Côte d’Ivoire": 33,
+    "Ecuador": 28,
+    "Netherlands": 7,
+    "Japan": 17,
+    "Tunisia": 40,
+    "Sweden": 39,
+    "Belgium": 9,
+    "Egypt": 29,
+    "Iran": 18,
+    "New Zealand": 95,
+    "Spain": 2,
+    "Cabo Verde": 70,
+    "Saudi Arabia": 57,
+    "Uruguay": 13,
+    "France": 1,
+    "Senegal": 21,
+    "Norway": 44,
+    "Iraq": 61,
+    "Argentina": 3,
+    "Algeria": 36,
+    "Austria": 23,
+    "Jordan": 68,
+    "Portugal": 5,
+    "Uzbekistan": 62,
+    "Colombia": 15,
+    "Congo DR": 51,
+    "England": 4,
+    "Croatia": 11,
+    "Ghana": 65,
+    "Panama": 53
   },
-  "groupResults": {},
+  "groupResults": {
+    "A-0": {
+      "a": "2",
+      "b": "0"
+    },
+    "A-1": {
+      "a": "2",
+      "b": "1"
+    }
+  },
   "knockoutMatches": [],
   "schedule": {
-    "A-0": 1, "A-1": 1, "A-2": 8, "A-3": 8, "A-4": 14, "A-5": 14,
-    "B-0": 14, "B-1": 14, "B-2": 8, "B-3": 8, "B-4": 2, "B-5": 3,
-    "C-0": 3, "C-1": 3, "C-2": 9, "C-3": 9, "C-4": 14, "C-5": 14,
-    "D-0": 2, "D-1": 3, "D-2": 9, "D-3": 9, "D-4": 15, "D-5": 15,
-    "E-0": 4, "E-1": 4, "E-2": 10, "E-3": 10, "E-4": 15, "E-5": 15,
-    "F-0": 4, "F-1": 4, "F-2": 15, "F-3": 15, "F-4": 10, "F-5": 10,
-    "G-0": 5, "G-1": 5, "G-2": 11, "G-3": 11, "G-4": 16, "G-5": 16,
-    "H-0": 5, "H-1": 5, "H-2": 11, "H-3": 11, "H-4": 16, "H-5": 16,
-    "I-0": 6, "I-1": 6, "I-2": 16, "I-3": 16, "I-4": 12, "I-5": 12,
-    "J-0": 6, "J-1": 6, "J-2": 12, "J-3": 12, "J-4": 17, "J-5": 17,
-    "K-0": 13, "K-1": 13, "K-2": 17, "K-3": 17, "K-4": 7, "K-5": 7,
-    "L-0": 7, "L-1": 7, "L-2": 13, "L-3": 13, "L-4": 17, "L-5": 17
+    "A-0": 1,
+    "A-1": 1,
+    "A-2": 8,
+    "A-3": 8,
+    "A-4": 14,
+    "A-5": 14,
+    "B-0": 14,
+    "B-1": 14,
+    "B-2": 8,
+    "B-3": 8,
+    "B-4": 2,
+    "B-5": 3,
+    "C-0": 3,
+    "C-1": 3,
+    "C-2": 9,
+    "C-3": 9,
+    "C-4": 14,
+    "C-5": 14,
+    "D-0": 2,
+    "D-1": 3,
+    "D-2": 9,
+    "D-3": 9,
+    "D-4": 15,
+    "D-5": 15,
+    "E-0": 4,
+    "E-1": 4,
+    "E-2": 10,
+    "E-3": 10,
+    "E-4": 15,
+    "E-5": 15,
+    "F-0": 4,
+    "F-1": 4,
+    "F-2": 15,
+    "F-3": 15,
+    "F-4": 10,
+    "F-5": 10,
+    "G-0": 5,
+    "G-1": 5,
+    "G-2": 11,
+    "G-3": 11,
+    "G-4": 16,
+    "G-5": 16,
+    "H-0": 5,
+    "H-1": 5,
+    "H-2": 11,
+    "H-3": 11,
+    "H-4": 16,
+    "H-5": 16,
+    "I-0": 6,
+    "I-1": 6,
+    "I-2": 16,
+    "I-3": 16,
+    "I-4": 12,
+    "I-5": 12,
+    "J-0": 6,
+    "J-1": 6,
+    "J-2": 12,
+    "J-3": 12,
+    "J-4": 17,
+    "J-5": 17,
+    "K-0": 13,
+    "K-1": 13,
+    "K-2": 17,
+    "K-3": 17,
+    "K-4": 7,
+    "K-5": 7,
+    "L-0": 7,
+    "L-1": 7,
+    "L-2": 13,
+    "L-3": 13,
+    "L-4": 17,
+    "L-5": 17
   },
   "gamedayDates": {
-    "1": "2026-06-11", "2": "2026-06-12", "3": "2026-06-13",
-    "4": "2026-06-14", "5": "2026-06-15", "6": "2026-06-16",
-    "7": "2026-06-17", "8": "2026-06-18", "9": "2026-06-19",
-    "10": "2026-06-20", "11": "2026-06-21", "12": "2026-06-22",
-    "13": "2026-06-23", "14": "2026-06-24", "15": "2026-06-25",
-    "16": "2026-06-26", "17": "2026-06-27"
+    "1": "2026-06-11",
+    "2": "2026-06-12",
+    "3": "2026-06-13",
+    "4": "2026-06-14",
+    "5": "2026-06-15",
+    "6": "2026-06-16",
+    "7": "2026-06-17",
+    "8": "2026-06-18",
+    "9": "2026-06-19",
+    "10": "2026-06-20",
+    "11": "2026-06-21",
+    "12": "2026-06-22",
+    "13": "2026-06-23",
+    "14": "2026-06-24",
+    "15": "2026-06-25",
+    "16": "2026-06-26",
+    "17": "2026-06-27"
   },
   "sweeps": [
     {
       "id": "banterade",
       "name": "Banterade",
       "players": [
-        { "name": "Adrian", "nations": ["Brazil", "Croatia", "Iran", "Canada", "South Africa", "Uzbekistan"] },
-        { "name": "Damian", "nations": ["Argentina", "Germany", "Austria", "Qatar", "Saudi Arabia", "Paraguay"] },
-        { "name": "Daniel", "nations": ["Morocco", "Belgium", "Korea Republic", "Czechia", "Bosnia and Herzegovina", "Curaçao"] },
-        { "name": "Jake", "nations": ["England", "Colombia", "Egypt", "Côte d’Ivoire", "Scotland", "Ghana"] },
-        { "name": "Mark", "nations": ["France", "Mexico", "Australia", "Algeria", "Congo DR", "New Zealand"] },
-        { "name": "Michael", "nations": ["Portugal", "Switzerland", "Japan", "Tunisia", "Norway", "Cabo Verde"] },
-        { "name": "Simon", "nations": ["Spain", "Uruguay", "Ecuador", "Türkiye", "Iraq", "Haiti"] },
-        { "name": "Swanson", "nations": ["Netherlands", "United States", "Senegal", "Sweden", "Panama", "Jordan"] }
+        {
+          "name": "Adrian",
+          "nations": [
+            "Brazil",
+            "Croatia",
+            "Iran",
+            "Canada",
+            "South Africa",
+            "Uzbekistan"
+          ]
+        },
+        {
+          "name": "Damian",
+          "nations": [
+            "Argentina",
+            "Germany",
+            "Austria",
+            "Qatar",
+            "Saudi Arabia",
+            "Paraguay"
+          ]
+        },
+        {
+          "name": "Daniel",
+          "nations": [
+            "Morocco",
+            "Belgium",
+            "Korea Republic",
+            "Czechia",
+            "Bosnia and Herzegovina",
+            "Curaçao"
+          ]
+        },
+        {
+          "name": "Jake",
+          "nations": [
+            "England",
+            "Colombia",
+            "Egypt",
+            "Côte d’Ivoire",
+            "Scotland",
+            "Ghana"
+          ]
+        },
+        {
+          "name": "Mark",
+          "nations": [
+            "France",
+            "Mexico",
+            "Australia",
+            "Algeria",
+            "Congo DR",
+            "New Zealand"
+          ]
+        },
+        {
+          "name": "Michael",
+          "nations": [
+            "Portugal",
+            "Switzerland",
+            "Japan",
+            "Tunisia",
+            "Norway",
+            "Cabo Verde"
+          ]
+        },
+        {
+          "name": "Simon",
+          "nations": [
+            "Spain",
+            "Uruguay",
+            "Ecuador",
+            "Türkiye",
+            "Iraq",
+            "Haiti"
+          ]
+        },
+        {
+          "name": "Swanson",
+          "nations": [
+            "Netherlands",
+            "United States",
+            "Senegal",
+            "Sweden",
+            "Panama",
+            "Jordan"
+          ]
+        }
       ]
     },
     {
       "id": "tamaseri",
       "name": "Tamaseri",
       "players": [
-        { "name": "Danny", "nations": ["France", "Mexico", "Japan", "Tunisia", "South Africa", "Paraguay"] },
-        { "name": "Rob", "nations": ["Morocco", "Belgium", "Egypt", "Côte d’Ivoire", "Saudi Arabia", "Curaçao"] },
-        { "name": "Dan P.", "nations": ["Portugal", "United States", "Senegal", "Czechia", "Bosnia and Herzegovina", "Jordan"] },
-        { "name": "Joe", "nations": ["Brazil", "Croatia", "Ecuador", "Sweden", "Norway", "Haiti"] },
-        { "name": "Julz", "nations": ["Spain", "Germany", "Austria", "Canada", "Scotland", "New Zealand"] },
-        { "name": "Michael", "nations": ["Argentina", "Colombia", "Australia", "Türkiye", "Panama", "Cabo Verde"] },
-        { "name": "Aaron", "nations": ["Netherlands", "Switzerland", "Iran", "Algeria", "Congo DR", "Uzbekistan"] },
-        { "name": "Adi", "nations": ["England", "Uruguay", "Korea Republic", "Qatar", "Iraq", "Ghana"] }
+        {
+          "name": "Danny",
+          "nations": [
+            "France",
+            "Mexico",
+            "Japan",
+            "Tunisia",
+            "South Africa",
+            "Paraguay"
+          ]
+        },
+        {
+          "name": "Rob",
+          "nations": [
+            "Morocco",
+            "Belgium",
+            "Egypt",
+            "Côte d’Ivoire",
+            "Saudi Arabia",
+            "Curaçao"
+          ]
+        },
+        {
+          "name": "Dan P.",
+          "nations": [
+            "Portugal",
+            "United States",
+            "Senegal",
+            "Czechia",
+            "Bosnia and Herzegovina",
+            "Jordan"
+          ]
+        },
+        {
+          "name": "Joe",
+          "nations": [
+            "Brazil",
+            "Croatia",
+            "Ecuador",
+            "Sweden",
+            "Norway",
+            "Haiti"
+          ]
+        },
+        {
+          "name": "Julz",
+          "nations": [
+            "Spain",
+            "Germany",
+            "Austria",
+            "Canada",
+            "Scotland",
+            "New Zealand"
+          ]
+        },
+        {
+          "name": "Michael",
+          "nations": [
+            "Argentina",
+            "Colombia",
+            "Australia",
+            "Türkiye",
+            "Panama",
+            "Cabo Verde"
+          ]
+        },
+        {
+          "name": "Aaron",
+          "nations": [
+            "Netherlands",
+            "Switzerland",
+            "Iran",
+            "Algeria",
+            "Congo DR",
+            "Uzbekistan"
+          ]
+        },
+        {
+          "name": "Adi",
+          "nations": [
+            "England",
+            "Uruguay",
+            "Korea Republic",
+            "Qatar",
+            "Iraq",
+            "Ghana"
+          ]
+        }
       ]
     }
   ]

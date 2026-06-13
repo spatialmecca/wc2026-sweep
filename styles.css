@@ -442,8 +442,8 @@ table.draw-table .name-cell {
 .gd-fixtures { display: flex; flex-direction: column; gap: 8px; }
 .gd-fixture {
   display: grid;
-  grid-template-columns: 1fr 56px 1fr;
-  align-items: center; gap: 8px;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: 10px;
   padding: 10px 4px;
   position: relative;
   border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -463,10 +463,13 @@ table.draw-table .name-cell {
 .gd-team-b { text-align: left; }
 .gd-vs, .gd-score {
   text-align: center; font-weight: 700; color: #b9c6da;
+  white-space: nowrap;
 }
+.gd-vs { min-width: 26px; }
 .gd-score {
-  font-size: 1.1rem; color: #fff;
-  background: rgba(255,255,255,0.12); padding: 3px 6px; border-radius: 6px;
+  font-size: 1.05rem; color: #fff;
+  background: rgba(255,255,255,0.12); padding: 4px 10px; border-radius: 6px;
+  letter-spacing: 0.02em;
 }
 .gd-card-foot {
   font-size: 0.66rem; color: #8da0bf;

@@ -394,6 +394,7 @@ function renderLadder() {
         '<td><div class="player-name">' + esc(r.name) + "</div>" +
         '<div class="team-chips">' + chips + "</div></td>" +
         '<td class="num pts-big">' + r.pts + "</td>" +
+        '<td class="num">' + r.played + "</td>" +
         '<td class="num">' + (r.gd > 0 ? "+" : "") + r.gd + "</td>" +
         '<td class="num col-gf">' + r.gf + "</td>" +
         '<td class="num">' + tag + "</td>" +
@@ -403,7 +404,7 @@ function renderLadder() {
     body =
       '<table class="ladder"><thead><tr>' +
       '<th class="num">#</th><th>Player &amp; nations</th>' +
-      '<th class="num">Pts</th><th class="num">GD</th>' +
+      '<th class="num">Pts</th><th class="num">GP</th><th class="num">GD</th>' +
       '<th class="num col-gf">GF</th><th class="num">Status</th>' +
       "</tr></thead><tbody>" + body + "</tbody></table>";
   }

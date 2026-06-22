@@ -2,7 +2,7 @@
   "tournament": "FIFA World Cup 2026",
   "season": "2026",
   "brand": "Banterade",
-  "lastUpdated": "2026-06-21T07:05:37.905Z",
+  "lastUpdated": "2026-06-22T07:50:24.064Z",
   "pointsRules": {
     "groupWin": 3,
     "groupDraw": 1,
@@ -284,6 +284,22 @@
     "F-5": {
       "a": "4",
       "b": "0"
+    },
+    "G-2": {
+      "a": "0",
+      "b": "0"
+    },
+    "G-3": {
+      "a": "3",
+      "b": "1"
+    },
+    "H-2": {
+      "a": "4",
+      "b": "0"
+    },
+    "H-3": {
+      "a": "2",
+      "b": "2"
     }
   },
   "knockoutMatches": [],

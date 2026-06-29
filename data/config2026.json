@@ -430,7 +430,24 @@
       "b": "3"
     }
   },
-  "knockoutMatches": [],
+  "knockoutMatches": [
+    { "round": "R32", "teamA": "Canada", "teamB": "South Africa", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 18 },
+    { "round": "R32", "teamA": "Brazil", "teamB": "Japan", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 19 },
+    { "round": "R32", "teamA": "Germany", "teamB": "Paraguay", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 19 },
+    { "round": "R32", "teamA": "Netherlands", "teamB": "Morocco", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 19 },
+    { "round": "R32", "teamA": "Côte d’Ivoire", "teamB": "Norway", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 20 },
+    { "round": "R32", "teamA": "France", "teamB": "Sweden", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 20 },
+    { "round": "R32", "teamA": "Mexico", "teamB": "Ecuador", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 20 },
+    { "round": "R32", "teamA": "England", "teamB": "Congo DR", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 21 },
+    { "round": "R32", "teamA": "Belgium", "teamB": "Senegal", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 21 },
+    { "round": "R32", "teamA": "United States", "teamB": "Bosnia and Herzegovina", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 21 },
+    { "round": "R32", "teamA": "Spain", "teamB": "Austria", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 22 },
+    { "round": "R32", "teamA": "Portugal", "teamB": "Croatia", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 22 },
+    { "round": "R32", "teamA": "Switzerland", "teamB": "Algeria", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 22 },
+    { "round": "R32", "teamA": "Australia", "teamB": "Egypt", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 23 },
+    { "round": "R32", "teamA": "Argentina", "teamB": "Cabo Verde", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 23 },
+    { "round": "R32", "teamA": "Colombia", "teamB": "Ghana", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 23 }
+  ],
   "schedule": {
     "A-0": 1,
     "A-1": 1,
@@ -522,7 +539,13 @@
     "14": "2026-06-24",
     "15": "2026-06-25",
     "16": "2026-06-26",
-    "17": "2026-06-27"
+    "17": "2026-06-27",
+    "18": "2026-06-28",
+    "19": "2026-06-29",
+    "20": "2026-06-30",
+    "21": "2026-07-01",
+    "22": "2026-07-02",
+    "23": "2026-07-03"
   },
   "sweeps": [
     {

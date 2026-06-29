@@ -2,7 +2,7 @@
   "tournament": "FIFA World Cup 2026",
   "season": "2026",
   "brand": "Banterade",
-  "lastUpdated": "2026-06-28T05:34:07.798Z",
+  "lastUpdated": "2026-06-29T02:20:33.610Z",
   "pointsRules": {
     "groupWin": 3,
     "groupDraw": 1,
@@ -431,22 +431,166 @@
     }
   },
   "knockoutMatches": [
-    { "round": "R32", "teamA": "Canada", "teamB": "South Africa", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 18 },
-    { "round": "R32", "teamA": "Brazil", "teamB": "Japan", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 19 },
-    { "round": "R32", "teamA": "Germany", "teamB": "Paraguay", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 19 },
-    { "round": "R32", "teamA": "Netherlands", "teamB": "Morocco", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 19 },
-    { "round": "R32", "teamA": "Côte d’Ivoire", "teamB": "Norway", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 20 },
-    { "round": "R32", "teamA": "France", "teamB": "Sweden", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 20 },
-    { "round": "R32", "teamA": "Mexico", "teamB": "Ecuador", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 20 },
-    { "round": "R32", "teamA": "England", "teamB": "Congo DR", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 21 },
-    { "round": "R32", "teamA": "Belgium", "teamB": "Senegal", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 21 },
-    { "round": "R32", "teamA": "United States", "teamB": "Bosnia and Herzegovina", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 21 },
-    { "round": "R32", "teamA": "Spain", "teamB": "Austria", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 22 },
-    { "round": "R32", "teamA": "Portugal", "teamB": "Croatia", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 22 },
-    { "round": "R32", "teamA": "Switzerland", "teamB": "Algeria", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 22 },
-    { "round": "R32", "teamA": "Australia", "teamB": "Egypt", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 23 },
-    { "round": "R32", "teamA": "Argentina", "teamB": "Cabo Verde", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 23 },
-    { "round": "R32", "teamA": "Colombia", "teamB": "Ghana", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 23 }
+    {
+      "round": "R32",
+      "teamA": "Canada",
+      "teamB": "South Africa",
+      "scoreA": "1",
+      "scoreB": "0",
+      "pensA": null,
+      "pensB": null,
+      "gameday": 18
+    },
+    {
+      "round": "R32",
+      "teamA": "Brazil",
+      "teamB": "Japan",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 19
+    },
+    {
+      "round": "R32",
+      "teamA": "Germany",
+      "teamB": "Paraguay",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 19
+    },
+    {
+      "round": "R32",
+      "teamA": "Netherlands",
+      "teamB": "Morocco",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 19
+    },
+    {
+      "round": "R32",
+      "teamA": "Côte d’Ivoire",
+      "teamB": "Norway",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 20
+    },
+    {
+      "round": "R32",
+      "teamA": "France",
+      "teamB": "Sweden",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 20
+    },
+    {
+      "round": "R32",
+      "teamA": "Mexico",
+      "teamB": "Ecuador",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 20
+    },
+    {
+      "round": "R32",
+      "teamA": "England",
+      "teamB": "Congo DR",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 21
+    },
+    {
+      "round": "R32",
+      "teamA": "Belgium",
+      "teamB": "Senegal",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 21
+    },
+    {
+      "round": "R32",
+      "teamA": "United States",
+      "teamB": "Bosnia and Herzegovina",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 21
+    },
+    {
+      "round": "R32",
+      "teamA": "Spain",
+      "teamB": "Austria",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 22
+    },
+    {
+      "round": "R32",
+      "teamA": "Portugal",
+      "teamB": "Croatia",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 22
+    },
+    {
+      "round": "R32",
+      "teamA": "Switzerland",
+      "teamB": "Algeria",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 22
+    },
+    {
+      "round": "R32",
+      "teamA": "Australia",
+      "teamB": "Egypt",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 23
+    },
+    {
+      "round": "R32",
+      "teamA": "Argentina",
+      "teamB": "Cabo Verde",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 23
+    },
+    {
+      "round": "R32",
+      "teamA": "Colombia",
+      "teamB": "Ghana",
+      "scoreA": null,
+      "scoreB": null,
+      "pensA": null,
+      "pensB": null,
+      "gameday": 23
+    }
   ],
   "schedule": {
     "A-0": 1,

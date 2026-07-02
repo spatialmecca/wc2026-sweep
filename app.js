@@ -248,6 +248,14 @@ function computeTeams() {
     t.gGd = t.gGf - t.gGa;
     t.tGd = t.tGf - t.tGa;
     t.total = t.groupPts + t.elimPts;
+    // Best-case final total assuming this team wins everything from here.
+    // sf-lost teams only have the 3rd-place playoff left (max = third).
+    if (t.status === "IN") {
+      const maxElim = t.exit === "sf-lost" ? rules.third : rules.winner;
+      t.maxTotal = t.groupPts + maxElim;
+    } else {
+      t.maxTotal = t.total;
+    }
   }
   return teams;
 }
@@ -277,6 +285,7 @@ function computePlayers(teams, players) {
       nations: p.nations.slice(),
       teams: ns,
       pts: sum(ns.map(t => t.total)),
+      maxPts: sum(ns.map(t => (t.maxTotal != null ? t.maxTotal : t.total))),
       gd: sum(ns.map(t => t.tGd)),
       gf: sum(ns.map(t => t.tGf)),
       played: sum(ns.map(t => t.played)),
@@ -293,6 +302,13 @@ function computePlayers(teams, players) {
       rank = i + 1;
     }
     r.rank = rank; prev = r;
+  });
+  // Mathematically eliminated: max possible total < current leader's points.
+  // The leader's total can only grow, so anyone whose ceiling is already
+  // below the leader's floor can no longer win the sweep.
+  const leaderPts = rows.length ? rows[0].pts : 0;
+  rows.forEach(r => {
+    if (r.maxPts < leaderPts) r.status = "OUT";
   });
   return rows;
 }
@@ -508,10 +524,11 @@ function renderResults() {
       '<input type="number" min="0" data-ko="' + i + '" data-f="scoreB" value="' +
       (m.scoreB != null ? m.scoreB : "") + '"' + dis + ">" +
       '<select data-ko="' + i + '" data-f="teamB"' + dis + ">" + selB + "</select>" +
-      '<span class="pens">pens ' +
-      '<input type="number" min="0" style="width:30px" data-ko="' + i + '" data-f="pensA" value="' +
-      (m.pensA != null ? m.pensA : "") + '"' + dis + ">-" +
-      '<input type="number" min="0" style="width:30px" data-ko="' + i + '" data-f="pensB" value="' +
+      '<span class="pens"><span class="pens-label">pens</span>' +
+      '<input type="number" min="0" class="pens-input" data-ko="' + i + '" data-f="pensA" value="' +
+      (m.pensA != null ? m.pensA : "") + '"' + dis + ">" +
+      '<span class="pens-sep">–</span>' +
+      '<input type="number" min="0" class="pens-input" data-ko="' + i + '" data-f="pensB" value="' +
       (m.pensB != null ? m.pensB : "") + '"' + dis + "></span>" +
       (ro ? "<span></span>" : '<button class="btn danger" data-kodel="' + i + '">✕</button>') +
       "</div>"
@@ -734,7 +751,12 @@ function renderGamedays() {
         const ownerA = owners[f.teamA] || "—";
         const ownerB = owners[f.teamB] || "—";
         const hasScore = f.scoreA != null && f.scoreB != null;
-        const scoreText = hasScore ? '<div class="gd-score">' + f.scoreA + " — " + f.scoreB + "</div>" : "";
+        const hasPens = hasScore && f.pensA != null && f.pensB != null && f.pensA !== "" && f.pensB !== "";
+        const scoreText = hasScore
+          ? '<div class="gd-score">' + f.scoreA + " — " + f.scoreB +
+            (hasPens ? '<div class="gd-pens">pens ' + f.pensA + "–" + f.pensB + "</div>" : "") +
+            "</div>"
+          : "";
         return '<div class="gd-fixture">' +
           '<div class="gd-round-tag">' + esc(f.round) + "</div>" +
           '<div class="gd-team gd-team-a">' +

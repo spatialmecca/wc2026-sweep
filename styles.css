@@ -211,12 +211,31 @@ tr.rank-3 .rank-badge { background: #cd7f44; color: #2a1500; }
 
 .ko-match {
   display: grid;
-  grid-template-columns: 64px 1fr 44px 18px 44px 1fr 70px 30px;
+  grid-template-columns: 64px 1fr 44px 18px 44px 1fr 140px 30px;
   gap: 6px; align-items: center; padding: 6px 0;
   border-bottom: 1px solid var(--line);
 }
 .ko-match select, .ko-match input { width: 100%; }
-.ko-match .pens { font-size: 0.7rem; color: var(--muted); text-align: center; }
+.ko-match .pens {
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px; font-size: 0.75rem; color: var(--text);
+}
+.ko-match .pens-label {
+  color: var(--muted); font-size: 0.7rem; margin-right: 2px;
+  text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;
+}
+.ko-match .pens-sep { color: var(--muted); font-weight: 700; }
+.ko-match .pens .pens-input {
+  width: 36px !important; padding: 4px 6px;
+  background: #fffbe6; border: 1px solid #d4b23f;
+  text-align: center; font-weight: 700; font-size: 0.9rem;
+}
+.ko-match .pens .pens-input:focus {
+  outline: 2px solid var(--gold); outline-offset: 0;
+}
+.ko-match .pens .pens-input:disabled {
+  background: #f4f6f9; border-color: var(--line); opacity: 1;
+}
 .ko-legend { font-size: 0.78rem; color: var(--muted); margin: 6px 0 12px; }
 
 /* Setup */
@@ -469,7 +488,12 @@ table.draw-table .name-cell {
 .gd-score {
   font-size: 1.05rem; color: #fff;
   background: rgba(255,255,255,0.12); padding: 4px 10px; border-radius: 6px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.02em; line-height: 1.15;
+}
+.gd-score .gd-pens {
+  font-size: 0.68rem; color: #ffd57a; font-weight: 600;
+  margin-top: 2px; letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 .gd-card-foot {
   font-size: 0.66rem; color: #8da0bf;

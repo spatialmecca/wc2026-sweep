@@ -525,8 +525,8 @@
       "round": "R32",
       "teamA": "United States",
       "teamB": "Bosnia and Herzegovina",
-      "scoreA": null,
-      "scoreB": null,
+      "scoreA": "2",
+      "scoreB": "0",
       "pensA": null,
       "pensB": null,
       "gameday": 21

@@ -276,20 +276,119 @@ function koWinner(m) {
   return null; // drawn, no penalty result entered
 }
 
+/* ---------- Bracket enumeration for max/min projection ---------- */
+// Enumerate every possible completion of the bracket from the QF stage on.
+// Returns an array of { teamName: exitKey } outcome maps.
+// Standard bracket: SF1 = QF0w v QF1w, SF2 = QF2w v QF3w.
+// If an existing KO match already fixed a winner, only outcomes consistent with
+// that winner are kept.
+function bracketOutcomes() {
+  const qfs = CFG.knockoutMatches.filter(m => m.round === "QF").slice(0, 4);
+  if (qfs.length !== 4) return null;
+  const sfs = CFG.knockoutMatches.filter(m => m.round === "SF").slice(0, 2);
+  const finals = CFG.knockoutMatches.filter(m => m.round === "F").slice(0, 1);
+  const threePs = CFG.knockoutMatches.filter(m => m.round === "3P").slice(0, 1);
+  const fixedSf = sfs.map(m => koWinner(m));
+  const fixedF = finals[0] ? koWinner(finals[0]) : null;
+  const fixed3 = threePs[0] ? koWinner(threePs[0]) : null;
+
+  const outcomes = [];
+  for (let qfMask = 0; qfMask < 16; qfMask++) {
+    let ok = true;
+    const qfW = [], qfL = [];
+    for (let i = 0; i < 4; i++) {
+      const takeB = ((qfMask >> i) & 1) === 1;
+      const winner = takeB ? qfs[i].teamB : qfs[i].teamA;
+      const loser = takeB ? qfs[i].teamA : qfs[i].teamB;
+      const w = koWinner(qfs[i]);
+      if (w && w !== winner) { ok = false; break; }
+      qfW.push(winner); qfL.push(loser);
+    }
+    if (!ok) continue;
+    for (let sfMask = 0; sfMask < 4; sfMask++) {
+      const tB1 = (sfMask & 1) === 1;
+      const tB2 = ((sfMask >> 1) & 1) === 1;
+      const sf1W = tB1 ? qfW[1] : qfW[0];
+      const sf1L = tB1 ? qfW[0] : qfW[1];
+      const sf2W = tB2 ? qfW[3] : qfW[2];
+      const sf2L = tB2 ? qfW[2] : qfW[3];
+      if (fixedSf[0] && fixedSf[0] !== sf1W) continue;
+      if (fixedSf[1] && fixedSf[1] !== sf2W) continue;
+      for (let fMask = 0; fMask < 2; fMask++) {
+        const champion = fMask === 0 ? sf1W : sf2W;
+        const runnerUp = fMask === 0 ? sf2W : sf1W;
+        if (fixedF && fixedF !== champion) continue;
+        for (let pMask = 0; pMask < 2; pMask++) {
+          const third = pMask === 0 ? sf1L : sf2L;
+          const fourth = pMask === 0 ? sf2L : sf1L;
+          if (fixed3 && fixed3 !== third) continue;
+          const o = {};
+          qfL.forEach(t => { o[t] = "qf"; });
+          o[champion] = "winner"; o[runnerUp] = "runnerUp";
+          o[third] = "third"; o[fourth] = "fourth";
+          outcomes.push(o);
+        }
+      }
+    }
+  }
+  return outcomes;
+}
+
+// Elim-value lookup for a given exit key.
+function elimForExit(exitKey, rules) {
+  const map = {
+    winner: rules.winner, runnerUp: rules.runnerUp,
+    third: rules.third, fourth: rules.fourth,
+    qf: rules.qfLoser, r16: rules.r16Loser, r32: rules.r32Loser,
+    gs3: rules.gs3rd, gs4: rules.gs4th
+  };
+  return map[exitKey] != null ? map[exitKey] : 0;
+}
+
 function computePlayers(teams, players) {
+  const rules = CFG.pointsRules;
+  const outcomes = bracketOutcomes();
   const rows = (players || []).map(p => {
     const ns = p.nations.filter(Boolean).map(n => teams[n]).filter(Boolean);
     const finishRanks = ns.map(t => FINISH_RANK[t.exit] != null ? FINISH_RANK[t.exit] : 0);
+    const alive = ns.filter(t => t.status === "IN");
+    const dead = ns.filter(t => t.status === "OUT");
+    const deadPts = sum(dead.map(t => t.total));
+    const aliveGroup = sum(alive.map(t => t.groupPts));
+    const currentPts = sum(ns.map(t => t.total));
+
+    // Compute min/max across every possible bracket completion.
+    // Falls back to the naive per-team ceiling if we don't yet have 4 QFs.
+    let minPts, maxPts;
+    if (outcomes && alive.length > 0) {
+      minPts = Infinity; maxPts = -Infinity;
+      for (const o of outcomes) {
+        let futureElim = 0;
+        for (const t of alive) {
+          const e = o[t.name];
+          futureElim += e ? elimForExit(e, rules) : (t.maxTotal - t.groupPts);
+        }
+        const total = deadPts + aliveGroup + futureElim;
+        if (total < minPts) minPts = total;
+        if (total > maxPts) maxPts = total;
+      }
+    } else {
+      // Naive fallback: each alive team maxes independently (may overestimate).
+      minPts = currentPts;
+      maxPts = sum(ns.map(t => (t.maxTotal != null ? t.maxTotal : t.total)));
+    }
+    if (alive.length === 0) { minPts = currentPts; maxPts = currentPts; }
+
     return {
       name: p.name,
       nations: p.nations.slice(),
       teams: ns,
-      pts: sum(ns.map(t => t.total)),
-      maxPts: sum(ns.map(t => (t.maxTotal != null ? t.maxTotal : t.total))),
+      pts: currentPts,
+      maxPts, minPts,
       gd: sum(ns.map(t => t.tGd)),
       gf: sum(ns.map(t => t.tGf)),
       played: sum(ns.map(t => t.played)),
-      status: ns.some(t => t.status === "IN") ? "IN" : "OUT",
+      status: alive.length > 0 ? "IN" : "OUT",
       bestFinish: finishRanks.length ? Math.min(...finishRanks) : 99
     };
   });
@@ -303,12 +402,12 @@ function computePlayers(teams, players) {
     }
     r.rank = rank; prev = r;
   });
-  // Mathematically eliminated: max possible total < current leader's points.
-  // The leader's total can only grow, so anyone whose ceiling is already
-  // below the leader's floor can no longer win the sweep.
-  const leaderPts = rows.length ? rows[0].pts : 0;
+  // Mathematically eliminated: my ceiling is below someone else's floor.
+  // If any rival is guaranteed to finish at their min ≥ my max, I can't win.
   rows.forEach(r => {
-    if (r.maxPts < leaderPts) r.status = "OUT";
+    const others = rows.filter(o => o !== r);
+    const bestOtherMin = others.length ? Math.max(...others.map(o => o.minPts)) : -Infinity;
+    if (r.maxPts < bestOtherMin) r.status = "OUT";
   });
   return rows;
 }
@@ -404,12 +503,16 @@ function renderLadder() {
       }).join("");
       const tag = r.status === "IN"
         ? '<span class="tag-in">IN</span>' : '<span class="tag-out">OUT</span>';
+      const showRange = r.minPts !== r.maxPts;
+      const range = showRange
+        ? '<div class="pts-range">' + r.minPts + " – " + r.maxPts + "</div>"
+        : "";
       return (
         '<tr class="rank-' + r.rank + '">' +
         '<td class="num"><span class="rank-badge">' + r.rank + "</span></td>" +
         '<td><div class="player-name">' + esc(r.name) + "</div>" +
         '<div class="team-chips">' + chips + "</div></td>" +
-        '<td class="num pts-big">' + r.pts + "</td>" +
+        '<td class="num"><div class="pts-big">' + r.pts + "</div>" + range + "</td>" +
         '<td class="num">' + r.played + "</td>" +
         '<td class="num">' + (r.gd > 0 ? "+" : "") + r.gd + "</td>" +
         '<td class="num col-gf">' + r.gf + "</td>" +
@@ -420,7 +523,8 @@ function renderLadder() {
     body =
       '<table class="ladder"><thead><tr>' +
       '<th class="num">#</th><th>Player &amp; nations</th>' +
-      '<th class="num">Pts</th><th class="num">GP</th><th class="num">GD</th>' +
+      '<th class="num">Pts <span class="col-hint">min–max</span></th>' +
+      '<th class="num">GP</th><th class="num">GD</th>' +
       '<th class="num col-gf">GF</th><th class="num">Status</th>' +
       "</tr></thead><tbody>" + body + "</tbody></table>";
   }

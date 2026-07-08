@@ -164,6 +164,15 @@ tr.rank-2 .rank-badge { background: #c7ccd4; color: #2a2f38; }
 tr.rank-3 .rank-badge { background: #cd7f44; color: #2a1500; }
 .player-name { font-weight: 600; }
 .pts-big { font-weight: 700; font-size: 1.05rem; }
+.pts-range {
+  font-size: 0.68rem; color: #ffd57a;
+  letter-spacing: 0.03em; margin-top: 1px;
+  font-weight: 600; white-space: nowrap;
+}
+.col-hint {
+  display: block; font-size: 0.6rem; color: #8da0bf;
+  font-weight: 500; text-transform: none; letter-spacing: 0.02em;
+}
 .team-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .chip {
   font-size: 0.72rem; padding: 2px 7px; border-radius: 10px;

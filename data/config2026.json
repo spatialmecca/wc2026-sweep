@@ -670,7 +670,11 @@
       "pensA": "4",
       "pensB": "3",
       "gameday": 27
-    }
+    },
+    { "round": "QF", "teamA": "France", "teamB": "Morocco", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 28 },
+    { "round": "QF", "teamA": "Spain", "teamB": "Belgium", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 29 },
+    { "round": "QF", "teamA": "Norway", "teamB": "England", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 30 },
+    { "round": "QF", "teamA": "Argentina", "teamB": "Switzerland", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 30 }
   ],
   "schedule": {
     "A-0": 1,
@@ -769,7 +773,10 @@
     "20": "2026-06-30",
     "21": "2026-07-01",
     "22": "2026-07-02",
-    "23": "2026-07-03"
+    "23": "2026-07-03",
+    "28": "2026-07-09",
+    "29": "2026-07-10",
+    "30": "2026-07-11"
   },
   "sweeps": [
     {

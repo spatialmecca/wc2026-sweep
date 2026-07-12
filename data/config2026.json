@@ -2,7 +2,7 @@
   "tournament": "FIFA World Cup 2026",
   "season": "2026",
   "brand": "Banterade",
-  "lastUpdated": "2026-07-08T00:34:52.995Z",
+  "lastUpdated": "2026-07-12T04:07:53.044Z",
   "pointsRules": {
     "groupWin": 3,
     "groupDraw": 1,
@@ -671,10 +671,46 @@
       "pensB": "3",
       "gameday": 27
     },
-    { "round": "QF", "teamA": "France", "teamB": "Morocco", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 28 },
-    { "round": "QF", "teamA": "Spain", "teamB": "Belgium", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 29 },
-    { "round": "QF", "teamA": "Norway", "teamB": "England", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 30 },
-    { "round": "QF", "teamA": "Argentina", "teamB": "Switzerland", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 30 }
+    {
+      "round": "QF",
+      "teamA": "France",
+      "teamB": "Morocco",
+      "scoreA": "2",
+      "scoreB": "0",
+      "pensA": null,
+      "pensB": null,
+      "gameday": 28
+    },
+    {
+      "round": "QF",
+      "teamA": "Spain",
+      "teamB": "Belgium",
+      "scoreA": "2",
+      "scoreB": "1",
+      "pensA": null,
+      "pensB": null,
+      "gameday": 29
+    },
+    {
+      "round": "QF",
+      "teamA": "Norway",
+      "teamB": "England",
+      "scoreA": "1",
+      "scoreB": "2",
+      "pensA": null,
+      "pensB": null,
+      "gameday": 30
+    },
+    {
+      "round": "QF",
+      "teamA": "Argentina",
+      "teamB": "Switzerland",
+      "scoreA": "3",
+      "scoreB": "1",
+      "pensA": null,
+      "pensB": null,
+      "gameday": 30
+    }
   ],
   "schedule": {
     "A-0": 1,

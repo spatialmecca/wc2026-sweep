@@ -489,6 +489,13 @@ table.draw-table .name-cell {
 }
 .gd-team-a { text-align: right; }
 .gd-team-b { text-align: left; }
+.gd-team-candidate .gd-team-name {
+  color: #b9c6da; font-style: italic; font-weight: 600;
+}
+.gd-team-candidate .gd-team-owner { font-style: italic; }
+.gd-or {
+  color: #7d90b5; font-weight: 600; margin: 0 3px; font-size: 0.85em;
+}
 .gd-vs, .gd-score {
   text-align: center; font-weight: 700; color: #b9c6da;
   white-space: nowrap;

@@ -334,6 +334,38 @@ function bracketOutcomes() {
   return outcomes;
 }
 
+// Resolve a knockout match's teams. Each side returns { team, candidates }:
+//   - team: the fixed team name if known (either set on match or determinable
+//     from an already-decided source match)
+//   - candidates: full list of possible teams that could fill this slot
+// feedsFrom syntax: "<Round><index>-<kind>", e.g. "SF0-winner", "SF1-loser".
+function resolveMatchTeams(m) {
+  const byRound = { QF: [], SF: [], "3P": [], F: [] };
+  for (const km of CFG.knockoutMatches) {
+    if (byRound[km.round]) byRound[km.round].push(km);
+  }
+  function resolveSide(spec, existing) {
+    if (existing) return { team: existing, candidates: [existing] };
+    if (!spec) return { team: null, candidates: [] };
+    const match = /^([A-Z0-9]+?)(\d+)-(winner|loser)$/.exec(spec);
+    if (!match) return { team: null, candidates: [] };
+    const round = match[1], idx = +match[2], kind = match[3];
+    const src = (byRound[round] || [])[idx];
+    if (!src || !src.teamA || !src.teamB) return { team: null, candidates: [] };
+    const w = koWinner(src);
+    if (w) {
+      const team = kind === "winner" ? w : (w === src.teamA ? src.teamB : src.teamA);
+      return { team, candidates: [team] };
+    }
+    return { team: null, candidates: [src.teamA, src.teamB] };
+  }
+  const spec = m.feedsFrom || {};
+  return {
+    teamA: resolveSide(spec.teamA, m.teamA),
+    teamB: resolveSide(spec.teamB, m.teamB)
+  };
+}
+
 // Elim-value lookup for a given exit key.
 function elimForExit(exitKey, rules) {
   const map = {
@@ -497,7 +529,10 @@ function renderLadder() {
         if (!n) return '<span class="chip">—</span>';
         const t = teams[n];
         if (!t) return '<span class="chip">' + esc(n) + "</span>";
-        const cls = t.status === "OUT" ? "chip out" : "chip";
+        // Strike through teams that can no longer win the tournament — that's
+        // any OUT team plus SF losers (still playing 3P for placement only).
+        const eliminated = t.status === "OUT" || t.exit === "sf-lost";
+        const cls = eliminated ? "chip out" : "chip";
         return '<span class="' + cls + '">' + esc(n) +
           '<span class="chip-pts">' + t.total + "</span></span>";
       }).join("");
@@ -813,11 +848,13 @@ function listFixtures() {
     });
   }
   CFG.knockoutMatches.forEach((m, idx) => {
+    const r = resolveMatchTeams(m);
     out.push({
       kind: "ko", matchId: "ko-" + idx, koIdx: idx,
       gameday: m.gameday != null && m.gameday !== "" ? +m.gameday : null,
       round: m.round || "KO",
-      teamA: m.teamA, teamB: m.teamB,
+      teamA: r.teamA.team, teamB: r.teamB.team,
+      candidatesA: r.teamA.candidates, candidatesB: r.teamB.candidates,
       scoreA: m.scoreA != null && m.scoreA !== "" ? +m.scoreA : null,
       scoreB: m.scoreB != null && m.scoreB !== "" ? +m.scoreB : null,
       pensA: m.pensA, pensB: m.pensB
@@ -851,9 +888,19 @@ function renderGamedays() {
     let sweepCards = "";
     CFG.sweeps.forEach((sw, si) => {
       const owners = ownersForSweep(si);
+      function renderSide(team, candidates) {
+        // A definite team gets a normal display. An undetermined slot with
+        // multiple candidates gets a slash-separated list, with the matching
+        // owners underneath (also slash-separated).
+        const list = team ? [team] : (candidates || []);
+        if (list.length === 0) return { name: "?", owner: "" };
+        const nameHtml = list.map(t => esc(t)).join(' <span class="gd-or">/</span> ');
+        const ownerHtml = list.map(t => esc(owners[t] || "—")).join(' <span class="gd-or">/</span> ');
+        return { name: nameHtml, owner: ownerHtml, isCandidate: !team };
+      }
       const fixturesHtml = fixtures.map(f => {
-        const ownerA = owners[f.teamA] || "—";
-        const ownerB = owners[f.teamB] || "—";
+        const A = renderSide(f.teamA, f.candidatesA);
+        const B = renderSide(f.teamB, f.candidatesB);
         const hasScore = f.scoreA != null && f.scoreB != null;
         const hasPens = hasScore && f.pensA != null && f.pensB != null && f.pensA !== "" && f.pensB !== "";
         const scoreText = hasScore
@@ -861,16 +908,18 @@ function renderGamedays() {
             (hasPens ? '<div class="gd-pens">pens ' + f.pensA + "–" + f.pensB + "</div>" : "") +
             "</div>"
           : "";
+        const cAcls = A.isCandidate ? " gd-team-candidate" : "";
+        const cBcls = B.isCandidate ? " gd-team-candidate" : "";
         return '<div class="gd-fixture">' +
           '<div class="gd-round-tag">' + esc(f.round) + "</div>" +
-          '<div class="gd-team gd-team-a">' +
-          '<div class="gd-team-name">' + esc(f.teamA) + "</div>" +
-          '<div class="gd-team-owner">' + esc(ownerA) + "</div>" +
+          '<div class="gd-team gd-team-a' + cAcls + '">' +
+          '<div class="gd-team-name">' + A.name + "</div>" +
+          '<div class="gd-team-owner">' + A.owner + "</div>" +
           "</div>" +
           (hasScore ? scoreText : '<div class="gd-vs">v</div>') +
-          '<div class="gd-team gd-team-b">' +
-          '<div class="gd-team-name">' + esc(f.teamB) + "</div>" +
-          '<div class="gd-team-owner">' + esc(ownerB) + "</div>" +
+          '<div class="gd-team gd-team-b' + cBcls + '">' +
+          '<div class="gd-team-name">' + B.name + "</div>" +
+          '<div class="gd-team-owner">' + B.owner + "</div>" +
           "</div>" +
           "</div>";
       }).join("");

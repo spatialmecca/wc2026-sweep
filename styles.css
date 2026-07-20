@@ -180,11 +180,17 @@ tr.rank-3 .rank-badge { background: #cd7f44; color: #2a1500; }
 }
 .chip.out { opacity: 0.5; text-decoration: line-through; }
 .chip .chip-pts { font-weight: 700; margin-left: 4px; }
-.tag-in, .tag-out {
+.tag-in, .tag-out, .tag-winner {
   font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700;
+  white-space: nowrap;
 }
 .tag-in { background: rgba(46,139,87,0.85); }
 .tag-out { background: rgba(176,57,43,0.85); }
+.tag-winner {
+  background: linear-gradient(135deg, #ffe066, #d4af37);
+  color: #3a2700; letter-spacing: 0.03em;
+  box-shadow: 0 0 12px rgba(212,175,55,0.5);
+}
 
 .empty-note {
   text-align: center; color: var(--muted); padding: 30px 16px;

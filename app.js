@@ -441,6 +441,10 @@ function computePlayers(teams, players) {
     const bestOtherMin = others.length ? Math.max(...others.map(o => o.minPts)) : -Infinity;
     if (r.maxPts < bestOtherMin) r.status = "OUT";
   });
+  // If exactly one player is still IN, they've clinched the sweep — everyone
+  // else is mathematically eliminated so this player is guaranteed to win.
+  const survivors = rows.filter(r => r.status === "IN");
+  if (survivors.length === 1) survivors[0].clinched = true;
   return rows;
 }
 
@@ -536,8 +540,11 @@ function renderLadder() {
         return '<span class="' + cls + '">' + esc(n) +
           '<span class="chip-pts">' + t.total + "</span></span>";
       }).join("");
-      const tag = r.status === "IN"
-        ? '<span class="tag-in">IN</span>' : '<span class="tag-out">OUT</span>';
+      const tag = r.clinched
+        ? '<span class="tag-winner">🏆 WINNER</span>'
+        : (r.status === "IN"
+          ? '<span class="tag-in">IN</span>'
+          : '<span class="tag-out">OUT</span>');
       const showRange = r.minPts !== r.maxPts;
       const range = showRange
         ? '<div class="pts-range">' + r.minPts + " – " + r.maxPts + "</div>"

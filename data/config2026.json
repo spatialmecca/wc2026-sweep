@@ -2,7 +2,7 @@
   "tournament": "FIFA World Cup 2026",
   "season": "2026",
   "brand": "Banterade",
-  "lastUpdated": "2026-07-12T04:07:53.044Z",
+  "lastUpdated": "2026-07-21T14:29:55.652Z",
   "pointsRules": {
     "groupWin": 3,
     "groupDraw": 1,
@@ -711,10 +711,42 @@
       "pensB": null,
       "gameday": 30
     },
-    { "round": "SF", "teamA": "France", "teamB": "Spain", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 33 },
-    { "round": "SF", "teamA": "England", "teamB": "Argentina", "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 34 },
-    { "round": "3P", "teamA": null, "teamB": null, "feedsFrom": { "teamA": "SF0-loser", "teamB": "SF1-loser" }, "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 37 },
-    { "round": "F", "teamA": null, "teamB": null, "feedsFrom": { "teamA": "SF0-winner", "teamB": "SF1-winner" }, "scoreA": null, "scoreB": null, "pensA": null, "pensB": null, "gameday": 38 }
+    {
+      "round": "SF",
+      "teamA": "France",
+      "teamB": "Spain",
+      "scoreA": "0",
+      "scoreB": "2",
+      "pensA": null,
+      "pensB": null
+    },
+    {
+      "round": "SF",
+      "teamA": "England",
+      "teamB": "Argentina",
+      "scoreA": "1",
+      "scoreB": "2",
+      "pensA": null,
+      "pensB": null
+    },
+    {
+      "round": "3P",
+      "teamA": "France",
+      "teamB": "England",
+      "scoreA": "4",
+      "scoreB": "6",
+      "pensA": null,
+      "pensB": null
+    },
+    {
+      "round": "F",
+      "teamA": "Spain",
+      "teamB": "Argentina",
+      "scoreA": "1",
+      "scoreB": "0",
+      "pensA": null,
+      "pensB": null
+    }
   ],
   "schedule": {
     "A-0": 1,
@@ -816,11 +848,7 @@
     "23": "2026-07-03",
     "28": "2026-07-09",
     "29": "2026-07-10",
-    "30": "2026-07-11",
-    "33": "2026-07-14",
-    "34": "2026-07-15",
-    "37": "2026-07-18",
-    "38": "2026-07-19"
+    "30": "2026-07-11"
   },
   "sweeps": [
     {
